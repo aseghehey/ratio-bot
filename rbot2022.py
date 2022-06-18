@@ -19,3 +19,5 @@ api.update_status("hello wrld: test #1")
 
 # res = Client.create_tweet(text="hello wrld")
 # print(res)
+
+#testing that i can work on this project from my machine - Keonte Nightingale
