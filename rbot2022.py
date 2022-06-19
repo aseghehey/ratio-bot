@@ -64,3 +64,26 @@ while True:
     time.sleep(15) # reloads mentions every 15 seconds
 
 '''
+
+while True:
+    mentions = api.mentions_timeline(since_id=mention_id) 
+    for mention in mentions: 
+        mention_id = mention.id
+        try:
+            print("trying") 
+            prev_tweet = api.get_status(mention.in_reply_to_status_id)
+            prevprev = api.get_status(prev_tweet.in_reply_to_status_id)
+
+            prevcount = prevprev.favorite_count
+            cnt = prev_tweet.favorite_count
+            print(prevprev.user.screen_name)
+            if cnt > prevcount:
+                api.update_status(f"@ {prev_tweet.user.screen_name} ratiod @ {prevprev.user.screen_name}", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+            else:
+                api.update_status("No ratio detected", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+            print("success")
+            print(prev_tweet.text)
+        except Exception as err:
+            print(err)
+        
+    time.sleep(15) # reloads mentions every 15 seconds
