@@ -1,3 +1,4 @@
+from audioop import reverse
 import tweepy
 import time
 
@@ -89,13 +90,30 @@ def mapcount(id): # given an "id_str" will return count of that id
         RatioMap[id] += 1
     return RatioMap[id]
 
+file_name = "last_tweet.txt"
 
+def set_last_seen(last_seen, file_name):
+    f_write = open(file_name, 'w')
+    f_write.write(str(mention_id))
+    f_write.close()
+    print('last seen set ' + str(mention_id))
+    return
 
-
+def retrieve_last_seen_id(file_name):
+    f_read = open(file_name, 'r')
+    last_seen_id = int(f_read.read().strip())
+    f_read.close()
+    print('last seen found ' + str(last_seen_id))
+    return last_seen_id
+#tweet id check 1538625211339313152
 while True:
-    mentions = api.mentions_timeline(since_id=mention_id) 
-    for mention in mentions: 
+    last_seen_id = retrieve_last_seen_id(file_name)
+    mentions = api.mentions_timeline(since_id = last_seen_id)
+    #mentions = api.mentions_timeline(since_id=mention_id) 
+    for mention in reversed(mentions):
+        print(mention.id)
         mention_id = mention.id
+        set_last_seen(mention_id, file_name)
         try:
             print("trying") 
             if validate(mention):
