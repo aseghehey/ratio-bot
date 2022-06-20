@@ -1,6 +1,6 @@
-from audioop import reverse
 import tweepy
 import time
+import random
 
 auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
 auth.set_access_token("1537546826026319872-oJFAjAnSlHDHgEC1JIudZpERAG0H0w", "ZWhna4jAbMWan5sx2RlsEFGq50dsGOAYDzZ1kL6ado17Z" )
@@ -14,14 +14,155 @@ try:
 except:
     print("couldn't verify")
 
-# api.update_status("hello wrld: test #1")
-# api.create_saved_search("tech")
-
-# has to contain "ratio status"
-# example: @ratio_bot_2022 ratio status
-# bot_id = int(api.me().id_str) 
 mention_id = 1
-# bot replying to its mentions which contain "ratio this"
+
+''' Variables: '''
+
+# Arrays for guy who ratiod, guy who got ratiod and for no ratio found
+# WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
+# NoRatioArr = ["Stop wasting my time",""]
+# LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
+
+
+
+wmap = {}
+lmap = {}
+dmap = {}
+ratiocounter = 1 
+
+''' Functions: '''
+def validateRatioFormat(tweet): # validates og and parent
+    if tweet.in_reply_to_status_id is not None: # if it has a prev
+        temp1 = api.get_status(tweet.in_reply_to_status_id) # create temp to check og
+        if temp1.in_reply_to_status_id is not None: # if og exists
+            return True 
+    return False
+
+def mapcount(id, RatioMap): # given an "id_str" will return count of that id
+    if id not in RatioMap:
+        RatioMap[id] = 1
+    else:
+        RatioMap[id] += 1
+    return RatioMap[id]
+
+def acc_status(id):
+    resW,resL,resD = 0,0,0
+    if id in wmap:
+        resW = wmap[id]
+    if id in lmap:
+        resL = lmap[id]
+    if id in dmap:
+        resD = dmap[id]
+    return [resW,resL,resD]
+
+
+def replyratio():
+    mention_id = 1
+    timeline = api.mentions_timeline(since_id = mention_id)
+    for mention in reversed(timeline):
+        if "check ratio" in mention.text:
+            if validateRatioFormat(mention):
+                mention_id = mention.id
+                prev_tweet = api.get_status(mention.in_reply_to_status_id)
+                prevprev = api.get_status(prev_tweet.in_reply_to_status_id)
+
+                if (prev_tweet.favorite_count) > (prevprev.favorite_count):
+                        wmapcnt = mapcount(prev_tweet.user.id,wmap)
+                        lmapcnt = mapcount(prevprev.user.id,lmap)
+                        rcnt = mapcount(mention.user.id, dmap)
+                        # api.update_status_with_media(f"✅ Ratio detected\n@{prevprev.user.screen_name} hold this L","checkingratio.png",in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+                        print("ratio")
+                        # api.update_status(f"✅ Ratio detected\n@{prevprev.user.screen_name} hold this L", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+                else:
+                    print("no ratio")
+                    # api.update_status("😐 Stop wasting my time", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+        elif "ratio account status" in mention.text:
+            stats = acc_status(mention.user.id)
+            print("ratio account status")
+            # api.update_status(f"Ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+        else:
+            # api.update_status(f"please use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+            print("incorrect format")
+
+
+
+# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","checkingratio.png",in_reply_to_status_id=1538708496065101824)
+# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","ratiodenied.jpeg",in_reply_to_status_id="1538708496065101824")
+
+# api.update_status(f"✅ Ratio detected\n@ blank hold this L", in_reply_to_status_id=1538716509568131072, "checkingratio.png",auto_populate_reply_metadata=True)
+
+replyratio()
+
+# trying to update status with media
+
+# api.update_status_with_media("✅ Ratio detected\n@ blank hold this L","checkingratio.png")
+
+
+# Need to get this to work properly
+
+'''
+file_name = "last_tweet.txt"
+
+def set_last_seen(last_seen, file_name):
+    f_write = open(file_name, 'w')
+    f_write.write(str(mention_id))
+    f_write.close()
+    print('last seen set ' + str(mention_id))
+    return
+
+def retrieve_last_seen_id(file_name):
+    f_read = open(file_name, 'r')
+    last_seen_id = int(f_read.read().strip())
+    f_read.close()
+    print('last seen found ' + str(last_seen_id))
+    return last_seen_id
+
+'''
+# tweet id check 1538625211339313152
+
+
+''' Cluster (contains while true with time '''
+'''
+while True:
+    print(f"again w {mention_id}")
+    # mentions = api.mentions_timeline(since_id = mention_id)
+    replyratio()
+
+    
+    for mention in reversed(mentions):
+        try:
+            mention_id = mention.id
+
+            # print("trying") 
+            if validate(mention):
+                # print("valid format")
+                # get above tweets
+                prev_tweet = api.get_status(mention.in_reply_to_status_id)
+                prevprev = api.get_status(prev_tweet.in_reply_to_status_id)
+                
+                # Testing:
+                print(f"{ratiocounter} - {prev_tweet.user.screen_name} - {prev_tweet.text} - {mention.id} - {prev_tweet.user.id}")
+
+                #Compare like counts
+                if (prev_tweet.favorite_count) > (prevprev.favorite_count):
+                    wmapcnt = mapcount(prev_tweet.user.id,wmap)
+                    lmapcnt = mapcount(prevprev.user.id,lmap)
+                    print(f"ratio {ratiocounter} w {wmapcnt}, l {lmapcnt}")
+                    # api.update_status(f"#{ratiocounter} @{prev_tweet.user.screen_name} ratiod @{prevprev.user.screen_name}", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+                    ratiocounter+=1 
+                else:
+                    print("no ratio")
+                    # api.update_status("Stop wasting my time", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
+                print("success")
+            
+            # something sassy if format is invalid
+        except Exception as err:
+            print(err)
+    
+
+    time.sleep(15) # reloads mentions every 15 seconds
+
+'''
 '''
 while True:
     mentions = api.mentions_timeline(since_id=mention_id) # gets a timeline of mentions
@@ -41,8 +182,6 @@ while True:
         mention_id = mention.id # sets m_id to current, so it doesnt read the same mention again
     time.sleep(15) # reloads mentions every 15 seconds
 '''
-
-
 '''
 while True:
     mentions = api.mentions_timeline(since_id=mention_id) # gets a timeline of mentions
@@ -65,86 +204,3 @@ while True:
     time.sleep(15) # reloads mentions every 15 seconds
 
 '''
-#array for guy who ratiod, guy who got ratiod and for no ratio found
-WratioArr = ["Ice cold ratio g", "The ratio is outstanding", "Ratio + W + YB better", ""]
-NoRatioArr = ["Stop wasting my time",""]
-LratioArr = ["L + YB better"]
-
-RatioMap = {}
-
-def validate(tweet): # validates og and parent
-    if tweet.in_reply_to_status_id is not None: # if it has a prev
-        temp1 = api.get_status(tweet.in_reply_to_status_id) # create temp to check og
-        if temp1.in_reply_to_status_id is not None: # if og exists
-            return True 
-    return False
-
-ratiocounter = 0 #keeps track of how many ratios the ratio bot has detected
-followertest = api.get_follower_ids()
-print(followertest)
-
-def mapcount(id): # given an "id_str" will return count of that id
-    if id not in RatioMap:
-        RatioMap[id] = 1
-    else:
-        RatioMap[id] += 1
-    return RatioMap[id]
-
-file_name = "last_tweet.txt"
-
-def set_last_seen(last_seen, file_name):
-    f_write = open(file_name, 'w')
-    f_write.write(str(mention_id))
-    f_write.close()
-    print('last seen set ' + str(mention_id))
-    return
-
-def retrieve_last_seen_id(file_name):
-    f_read = open(file_name, 'r')
-    last_seen_id = int(f_read.read().strip())
-    f_read.close()
-    print('last seen found ' + str(last_seen_id))
-    return last_seen_id
-#tweet id check 1538625211339313152
-while True:
-    last_seen_id = retrieve_last_seen_id(file_name)
-    mentions = api.mentions_timeline(since_id = last_seen_id)
-    #mentions = api.mentions_timeline(since_id=mention_id) 
-    for mention in reversed(mentions):
-        print(mention.id)
-        mention_id = mention.id
-        set_last_seen(mention_id, file_name)
-        try:
-            print("trying") 
-            if validate(mention):
-                prev_tweet = api.get_status(mention.in_reply_to_status_id)
-                prevprev = api.get_status(prev_tweet.in_reply_to_status_id)
-                
-                # get both counts
-                prevcount = prevprev.favorite_count
-                cnt = prev_tweet.favorite_count
-
-                print(prevprev.user.screen_name) # test for us
-
-                if cnt > prevcount:
-                    if prev_tweet.id_str in followertest:
-                        Wcount = mapcount(prev_tweet.id_str)
-                        # diff message if followers... which contains W count
-                    else:
-                        #message with no W count
-                        pass
-                    api.update_status(f"@ {prev_tweet.user.screen_name} ratiod @ {prevprev.user.screen_name}", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
-                    ratiocounter+=1 
-                else:
-                    api.update_status("No ratio detected", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
-
-                print("success")
-                print(prev_tweet.text)
-            
-            # something sassy if format is invalid
-            # api.update_status("No ratio detected", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
-
-        except Exception as err:
-            print(err)
-        
-    time.sleep(15) # reloads mentions every 15 seconds
