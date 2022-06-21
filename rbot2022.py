@@ -1,16 +1,20 @@
+from calendar import week
+from cgi import test
 import tweepy
 import time
 import random
+import heapq as hq
 
-auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
-auth.set_access_token("1537546826026319872-oJFAjAnSlHDHgEC1JIudZpERAG0H0w", "ZWhna4jAbMWan5sx2RlsEFGq50dsGOAYDzZ1kL6ado17Z" )
+def keys():
+    auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
+    auth.set_access_token("1537546826026319872-oJFAjAnSlHDHgEC1JIudZpERAG0H0w", "ZWhna4jAbMWan5sx2RlsEFGq50dsGOAYDzZ1kL6ado17Z" )
+    return auth
 
-api = tweepy.API(auth)
-
+api = tweepy.API(keys())
 # verification
 try:
     api.verify_credentials()
-    print("all good")
+    print("verified")
 except:
     print("couldn't verify")
 
@@ -22,8 +26,6 @@ mention_id = 1
 # WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
 # NoRatioArr = ["Stop wasting my time",""]
 # LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
-
-
 
 wmap = {}
 lmap = {}
@@ -55,7 +57,6 @@ def acc_status(id):
         resD = dmap[id]
     return [resW,resL,resD]
 
-
 def replyratio():
     mention_id = 1
     timeline = api.mentions_timeline(since_id = mention_id)
@@ -71,14 +72,14 @@ def replyratio():
                         lmapcnt = mapcount(prevprev.user.id,lmap)
                         rcnt = mapcount(mention.user.id, dmap)
                         # api.update_status_with_media(f"✅ Ratio detected\n@{prevprev.user.screen_name} hold this L","checkingratio.png",in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
-                        print("ratio")
+                        print(f"{prevprev.text} - {prevprev.user.screen_name} and {prev_tweet.user.screen_name}, W {wmap} L {lmap} - RATIO DETECTED")
                         # api.update_status(f"✅ Ratio detected\n@{prevprev.user.screen_name} hold this L", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
                 else:
                     print("no ratio")
                     # api.update_status("😐 Stop wasting my time", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
         elif "ratio account status" in mention.text:
             stats = acc_status(mention.user.id)
-            print("ratio account status")
+            print(f"ratio account status {mention.user.id}")
             # api.update_status(f"Ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
         else:
             # api.update_status(f"please use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
@@ -88,11 +89,34 @@ def replyratio():
 
 # api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","checkingratio.png",in_reply_to_status_id=1538708496065101824)
 # api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","ratiodenied.jpeg",in_reply_to_status_id="1538708496065101824")
-
 # api.update_status(f"✅ Ratio detected\n@ blank hold this L", in_reply_to_status_id=1538716509568131072, "checkingratio.png",auto_populate_reply_metadata=True)
 
-replyratio()
+def weeklywrapped(givenmap):
+    # given a map (Win,Loss or Detect) the function returns a list of the top 3 things in the map
 
+    topRatios = []
+    hq.heapify(topRatios)
+    for key,val in givenmap.items():
+        tmp = [val*-1,key]
+        hq.heappush(topRatios, tmp)
+    
+    top3 = []
+    for i in range(3):
+        top3.append(hq.heappop(topRatios))
+
+    return top3
+    
+test_Weekly = {12345356543363:10,12345245:2,123456789876:1002,134565432678765:1}
+try:
+    print("trying weekly")
+    # printing the list
+    print(weeklywrapped(test_Weekly))
+    # replyratio()
+    print("works weekly")
+except Exception as err:
+    print(err)
+
+# api.update_status("hello wrld 2",media_ids=1539070649615978500)
 # trying to update status with media
 
 # api.update_status_with_media("✅ Ratio detected\n@ blank hold this L","checkingratio.png")
