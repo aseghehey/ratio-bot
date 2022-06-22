@@ -82,7 +82,7 @@ def weeklywrapped(givenmap):
 
 def messageWeekly():
     #checks that map isnt empty and its length is greater than 3, otherwise we get an error
-    if isMapEmpty(wmap) and len(wmap) < 3:
+    if isMapEmpty(wmap) or len(wmap) < 3:
         return ""
     top3 = weeklywrapped(wmap)
     content = "top ratio accounts for this week 🔝\n\n"
