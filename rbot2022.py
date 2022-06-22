@@ -5,7 +5,6 @@ import tweepy
 import time
 import random
 import heapq as hq
-import json
 
 def keys():
     auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
@@ -23,12 +22,12 @@ except:
 mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
-
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
 # WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
 # NoRatioArr = ["Stop wasting my time",""]
 LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
 
+# wmap = {"1537546826026319872":2134,"1906177190":1232,"1516168680660520962":11}
 wmap = {}
 lmap = {}
 dmap = {}
@@ -40,6 +39,11 @@ def validateRatioFormat(tweet): # validates og and parent
         temp1 = api.get_status(tweet.in_reply_to_status_id) # create temp to check og
         if temp1.in_reply_to_status_id is not None: # if og exists
             return True 
+    return False
+
+def isMapEmpty(map):
+    if not map:
+        return True
     return False
 
 def mapcount(id, RatioMap): # given an "id_str" will return count of that id
@@ -71,17 +75,27 @@ def weeklywrapped(givenmap):
     for key,val in givenmap.items():
         tmp = [val*-1,key]
         hq.heappush(topRatios, tmp)
-    
     top3 = []
     for i in range(3):
         top3.append(hq.heappop(topRatios))
-
     return top3
 
-def get_media(url):
-    resp = requests.get(url)
-    data = resp.text
-    return json.loads(data)
+def messageWeekly():
+    if isMapEmpty(wmap):
+        return "no ratios this week :("
+        
+    top3 = weeklywrapped(wmap)
+    content = "top ratio accounts for this week 🔝\n\n"
+    sayings = []
+    for val, acc in top3:
+        tmpuser = api.get_user(user_id=acc)
+        tmp = f"@{tmpuser.screen_name} with {val*-1} ratio(s)"
+        sayings.append(tmp)
+    content += f"[🥇] {sayings[0]}\n[🥈] {sayings[1]}\n[🥉] {sayings[-1]}"
+    return content
+
+def makeWeeklypost():
+    api.update_status(messageWeekly())
 
 def reply_with_media(tweet_id, message, media):
     api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
@@ -91,10 +105,7 @@ def reply_no_media(tweet_id,message):
 
 def messageformat(id,option):
     content = ""
-    if option == 0:
-        #for weekly wrapped
-        pass 
-    elif option == 1: # check ratio
+    if option == 1: # check ratio
         content = f"✅ Ratio detected\n\n@{id.user.screen_name} {RSFromArray(LratioArr)}"
     elif option == 2: #ratio account status
         stats = acc_status(id.user.id)
@@ -135,7 +146,8 @@ def replyratio():
 
 try:
     print("testing:\n")
-    # replyratio()
+    # print(messageWeekly())
+    # print(isMapEmpty(wmap))
     print("\nWorks")
 except Exception as err:
     print(err)
