@@ -22,9 +22,9 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
-WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W"]
-NoRatioArr = ["stop wasting my time there's no ratio as of rn 🙄","stop being silly 😐", "no ratio as of rn 😕", "no ratio found 😒","come on there's no ratio there 😐"]
-LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job", "ratiooood"]
+WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio"]
+NoRatioArr = ["stop wasting my time there's no ratio as of rn 🙄","stop being silly 😐", "no ratio as of rn 😕", "no ratio found 😒","come on there's no ratio there... 😐"]
+LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "respectfully ratio + L", "down bad", "down horrendoulsy", "argument: invalid + ratio"]
 
 # wmap = {"1537546826026319872":2134,"1906177190":1232,"1516168680660520962":11}
 wmap = {}
@@ -35,7 +35,7 @@ ratiocounter = 1
 ''' Functions: '''
 def validateRatioFormat(tweet): # validates og and parent
     if tweet.in_reply_to_status_id is not None: # if it has a prev
-        temp1 = api.get_status(tweet.in_reply_to_status_id) # create temp to check og
+        temp1 = api.status(tweet.in_reply_to_status_id) # create temp to check og
         if temp1.in_reply_to_status_id is not None: # if og exists
             return True 
     return False
@@ -81,9 +81,9 @@ def weeklywrapped(givenmap):
     return top3
 
 def messageWeekly():
-    if isMapEmpty(wmap):
-        return "no ratios this week :("
-
+    #checks that map isnt empty and its length is greater than 3, otherwise we get an error
+    if isMapEmpty(wmap) and len(wmap) < 3:
+        return ""
     top3 = weeklywrapped(wmap)
     content = "top ratio accounts for this week 🔝\n\n"
     sayings = []
@@ -95,7 +95,8 @@ def messageWeekly():
     return content
 
 def makeWeeklypost():
-    api.update_status(messageWeekly())
+    if messageWeekly()!="":
+        api.update_status(messageWeekly())
 
 def reply_with_media(tweet_id, message, media):
     api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
@@ -143,6 +144,7 @@ def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
         message = messageformat(ratioedtwt,1)
         reply_with_media(mentionedtwt.id_str,message,"checkingratio.png")
     else:
+        # mapcount(mentionedtwt.user.id,lmap) #not necessary
         message = messageformat(mentionedtwt,4)
         reply_with_media(mentionedtwt.id_str,message,"ratiodenied.jpeg")
 
@@ -168,7 +170,7 @@ def replyratio():
 
 try:
     print("testing:\n")
-    replyratio()
+    # replyratio()
     print("\nWorks")
 except Exception as err:
     print(err)
