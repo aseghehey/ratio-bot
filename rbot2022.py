@@ -35,7 +35,7 @@ ratiocounter = 1
 ''' Functions: '''
 def validateRatioFormat(tweet): # validates og and parent
     if tweet.in_reply_to_status_id is not None: # if it has a prev
-        temp1 = api.status(tweet.in_reply_to_status_id) # create temp to check og
+        temp1 = status(tweet.in_reply_to_status_id) # create temp to check og
         if temp1.in_reply_to_status_id is not None: # if og exists
             return True 
     return False
@@ -170,7 +170,7 @@ def replyratio():
 
 try:
     print("testing:\n")
-    # replyratio()
+    replyratio()
     print("\nWorks")
 except Exception as err:
     print(err)
