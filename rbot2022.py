@@ -25,7 +25,7 @@ mention_id = 1
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
 # WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
 # NoRatioArr = ["Stop wasting my time",""]
-# LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
+LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
 
 wmap = {}
 lmap = {}
@@ -90,6 +90,18 @@ def replyratio():
 # api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","checkingratio.png",in_reply_to_status_id=1538708496065101824)
 # api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","ratiodenied.jpeg",in_reply_to_status_id="1538708496065101824")
 # api.update_status(f"✅ Ratio detected\n@ blank hold this L", in_reply_to_status_id=1538716509568131072, "checkingratio.png",auto_populate_reply_metadata=True)
+
+#Function for selecting random phrase for someone who got ratioed
+#Needs to be called in replyratio function, but functionality works
+#Array also needs to be updated, add more phrases
+def RSFromArray(Arr):
+    Ridx = random.randint(0,len(Arr)-1)
+    return Arr[Ridx]
+
+print(RSFromArray(LratioArr))
+
+
+
 
 def weeklywrapped(givenmap):
     # given a map (Win,Loss or Detect) the function returns a list of the top 3 things in the map
