@@ -18,7 +18,7 @@ try:
 except:
     print("couldn't verify")
 
-mention_id = 1
+mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 
@@ -47,7 +47,8 @@ def mapcount(id, RatioMap): # given an "id_str" will return count of that id
         RatioMap[id] += 1
     return RatioMap[id]
 
-def acc_status(id):
+def acc_status(id): 
+# takes the id of an account and returns their score in an array format: [Ws,Ls, Detections]
     resW,resL,resD = 0,0,0
     if id in wmap:
         resW = wmap[id]
@@ -58,7 +59,6 @@ def acc_status(id):
     return [resW,resL,resD]
 
 def replyratio():
-    mention_id = 1
     timeline = api.mentions_timeline(since_id = mention_id)
     for mention in reversed(timeline):
         if "check ratio" in mention.text:
@@ -85,12 +85,6 @@ def replyratio():
             # api.update_status(f"please use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score", in_reply_to_status_id=mention.id_str,auto_populate_reply_metadata=True)
             print("incorrect format")
 
-
-
-# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","checkingratio.png",in_reply_to_status_id=1538708496065101824)
-# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","ratiodenied.jpeg",in_reply_to_status_id="1538708496065101824")
-# api.update_status(f"✅ Ratio detected\n@ blank hold this L", in_reply_to_status_id=1538716509568131072, "checkingratio.png",auto_populate_reply_metadata=True)
-
 #Function for selecting random phrase for someone who got ratioed
 #Needs to be called in replyratio function, but functionality works
 #Array also needs to be updated, add more phrases
@@ -98,14 +92,8 @@ def RSFromArray(Arr):
     Ridx = random.randint(0,len(Arr)-1)
     return Arr[Ridx]
 
-print(RSFromArray(LratioArr))
-
-
-
-
 def weeklywrapped(givenmap):
     # given a map (Win,Loss or Detect) the function returns a list of the top 3 things in the map
-
     topRatios = []
     hq.heapify(topRatios)
     for key,val in givenmap.items():
@@ -117,7 +105,9 @@ def weeklywrapped(givenmap):
         top3.append(hq.heappop(topRatios))
 
     return top3
-    
+
+# Weekly and array test
+print(RSFromArray(LratioArr))
 test_Weekly = {12345356543363:10,12345245:2,123456789876:1002,134565432678765:1}
 try:
     print("trying weekly")
@@ -128,13 +118,20 @@ try:
 except Exception as err:
     print(err)
 
+
+# "trash":
+
+# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","checkingratio.png",in_reply_to_status_id=1538708496065101824)
+# api.update_status_with_media(f"✅ Ratio detected\n@ blank hold this L","ratiodenied.jpeg",in_reply_to_status_id="1538708496065101824")
+# api.update_status(f"✅ Ratio detected\n@ blank hold this L", in_reply_to_status_id=1538716509568131072, "checkingratio.png",auto_populate_reply_metadata=True)
+
+
 # api.update_status("hello wrld 2",media_ids=1539070649615978500)
 # trying to update status with media
 
 # api.update_status_with_media("✅ Ratio detected\n@ blank hold this L","checkingratio.png")
 
-
-# Need to get this to work properly
+# Need to get this to work properly:
 
 '''
 file_name = "last_tweet.txt"
