@@ -6,4 +6,4 @@ testing accounts:
 @testbot123454 password ratio123
 
 Main account:
-@Ratio_bot_2022 password: PratulIsGay
+@_ratiobot password: PratulIsGay
