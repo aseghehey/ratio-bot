@@ -1,9 +1,11 @@
 from calendar import week
 from cgi import test
+import requests
 import tweepy
 import time
 import random
 import heapq as hq
+import json
 
 def keys():
     auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
@@ -26,6 +28,7 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 # WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
 # NoRatioArr = ["Stop wasting my time",""]
 LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
+image_url = "https://i.kym-cdn.com/photos/images/original/001/969/177/2a5"
 
 wmap = {}
 lmap = {}
@@ -58,6 +61,33 @@ def acc_status(id):
         resD = dmap[id]
     return [resW,resL,resD]
 
+def RSFromArray(Arr):
+    Ridx = random.randint(0,len(Arr)-1)
+    return Arr[Ridx]
+
+def weeklywrapped(givenmap):
+    # given a map (Win,Loss or Detect) the function returns a list of the top 3 things in the map
+    topRatios = []
+    hq.heapify(topRatios)
+    for key,val in givenmap.items():
+        tmp = [val*-1,key]
+        hq.heappush(topRatios, tmp)
+    
+    top3 = []
+    for i in range(3):
+        top3.append(hq.heappop(topRatios))
+
+    return top3
+
+def get_media(url):
+    resp = requests.get(url)
+    data = resp.text
+    return json.loads(data)
+
+def reply_with_media(tweet_id, message, media):
+    api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
+
+
 def replyratio():
     timeline = api.mentions_timeline(since_id = mention_id)
     for mention in reversed(timeline):
@@ -88,36 +118,17 @@ def replyratio():
 #Function for selecting random phrase for someone who got ratioed
 #Needs to be called in replyratio function, but functionality works
 #Array also needs to be updated, add more phrases
-def RSFromArray(Arr):
-    Ridx = random.randint(0,len(Arr)-1)
-    return Arr[Ridx]
-
-def weeklywrapped(givenmap):
-    # given a map (Win,Loss or Detect) the function returns a list of the top 3 things in the map
-    topRatios = []
-    hq.heapify(topRatios)
-    for key,val in givenmap.items():
-        tmp = [val*-1,key]
-        hq.heappush(topRatios, tmp)
-    
-    top3 = []
-    for i in range(3):
-        top3.append(hq.heappop(topRatios))
-
-    return top3
 
 # Weekly and array test
-print(RSFromArray(LratioArr))
-test_Weekly = {12345356543363:10,12345245:2,123456789876:1002,134565432678765:1}
+# print(RSFromArray(LratioArr))
+# test_Weekly = {12345356543363:10,12345245:2,123456789876:1002,134565432678765:1}
+
 try:
-    print("trying weekly")
-    # printing the list
-    print(weeklywrapped(test_Weekly))
-    # replyratio()
-    print("works weekly")
+    print("testing get media")
+    # reply_with_media("1538685291791278086","posting this reply with pic","checkingratio.png")
+    print("get media works")
 except Exception as err:
     print(err)
-
 
 # "trash":
 
