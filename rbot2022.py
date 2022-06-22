@@ -1,6 +1,5 @@
 from calendar import week
 from cgi import test
-import requests
 import tweepy
 import time
 import random
@@ -23,9 +22,9 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
-# WratioArr = ["ice cold ratio g", "outstanding ratio", "ratiooooo"]
-# NoRatioArr = ["Stop wasting my time",""]
-LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job"]
+WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W"]
+NoRatioArr = ["stop wasting my time there's no ratio as of rn 🙄","stop being silly 😐", "no ratio as of rn 😕", "no ratio found 😒","come on there's no ratio there 😐"]
+LratioArr = ["L + YB better", "hold this L", "ratio + L + get a job", "ratiooood"]
 
 # wmap = {"1537546826026319872":2134,"1906177190":1232,"1516168680660520962":11}
 wmap = {}
@@ -76,6 +75,7 @@ def weeklywrapped(givenmap):
         tmp = [val*-1,key]
         hq.heappush(topRatios, tmp)
     top3 = []
+    # add checks to make sure its not out of bounds
     for i in range(3):
         top3.append(hq.heappop(topRatios))
     return top3
@@ -83,7 +83,7 @@ def weeklywrapped(givenmap):
 def messageWeekly():
     if isMapEmpty(wmap):
         return "no ratios this week :("
-        
+
     top3 = weeklywrapped(wmap)
     content = "top ratio accounts for this week 🔝\n\n"
     sayings = []
@@ -106,37 +106,59 @@ def reply_no_media(tweet_id,message):
 def messageformat(id,option):
     content = ""
     if option == 1: # check ratio
-        content = f"✅ Ratio detected\n\n@{id.user.screen_name} {RSFromArray(LratioArr)}"
+        content = f"{RSFromArray(WratioArr)} ✅\n\n@{id.user.screen_name} {RSFromArray(LratioArr)}"
     elif option == 2: #ratio account status
         stats = acc_status(id.user.id)
         content = f"@{id.user.screen_name} ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯"
     elif option == 3: # incorrect format
-        content = f"stop wasting my time and use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score"
+        content = f"use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score"
     else:# no ratio
-        content = "😐 Stop wasting my time"
+        content = f"{RSFromArray(NoRatioArr)}"
     return content
 
-def addToMaps(idW,idL,idR):
-    mapcount(idW,wmap)
-    mapcount(idL,lmap)
-    mapcount(idR,dmap)
+def addToMaps(W,L,R):
+    mapcount(W.user.id,wmap)
+    mapcount(L.user.id,lmap)
+    mapcount(R.user.id,dmap)
+
+def calculateratio(tweetID,prevtweetID):
+    if tweetID.favorite_count > prevtweetID.favorite_count:
+        return True
+    else:
+        return False
+
+def status(tweetID):
+    return api.get_status(tweetID)
+
+def validQuoteRatioFormat(mention):
+    if mention.in_reply_to_status_id is not None:
+        ratiotwt = status(mention.in_reply_to_status_id)
+        if ratiotwt.is_quote_status:
+            return True
+    return False
+
+def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
+    if calculateratio(ratiotwt,ratioedtwt):
+        addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
+        message = messageformat(ratioedtwt,1)
+        reply_with_media(mentionedtwt.id_str,message,"checkingratio.png")
+    else:
+        message = messageformat(mentionedtwt,4)
+        reply_with_media(mentionedtwt.id_str,message,"ratiodenied.jpeg")
 
 def replyratio():
     timeline = api.mentions_timeline()
     for mention in reversed(timeline):
         if "check ratio" in (mention.text).lower():
-            if validateRatioFormat(mention):
+            if validateRatioFormat(mention): # if regular format
                 mention_id = mention.id
-                prev_tweet = api.get_status(mention.in_reply_to_status_id)
-                prevprev = api.get_status(prev_tweet.in_reply_to_status_id)
-                if (prev_tweet.favorite_count) > (prevprev.favorite_count):
-                    addToMaps(prev_tweet.user.id,prevprev.user.id,mention.user.id)
-                    message = messageformat(prevprev,1)
-                    reply_with_media(mention.id_str,message,"checkingratio.png")
-                    # ratiocounter+=1 # to keep track of how many ratios we have found
-                else: # no ratio
-                    message = messageformat(mention,4)
-                    reply_with_media(mention.id_str,message,"ratiodenied.jpeg")
+                prev_tweet = status(mention.in_reply_to_status_id)
+                prevprev = status(prev_tweet.in_reply_to_status_id)
+                applyRatio(mention,prev_tweet,prevprev)
+            elif validQuoteRatioFormat(mention): # if quote tweet format
+                ratio = status(mention.in_reply_to_status_id)
+                quote = status(ratio.quoted_status_id_str)
+                applyRatio(mention,ratio,quote)
         elif "ratio account status" in (mention.text).lower():
             message = messageformat(mention,2)
             reply_no_media(mention.id_str,message)
@@ -146,8 +168,7 @@ def replyratio():
 
 try:
     print("testing:\n")
-    # print(messageWeekly())
-    # print(isMapEmpty(wmap))
+    replyratio()
     print("\nWorks")
 except Exception as err:
     print(err)
