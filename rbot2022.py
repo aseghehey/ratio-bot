@@ -35,7 +35,7 @@ ratiocounter = 1
 ''' Functions: '''
 def validateRatioFormat(tweet): # validates og and parent
     if tweet.in_reply_to_status_id is not None: # if it has a prev
-        temp1 = api.status(tweet.in_reply_to_status_id) # create temp to check og
+        temp1 = status(tweet.in_reply_to_status_id) # create temp to check og
         if temp1.in_reply_to_status_id is not None: # if og exists
             return True 
     return False
@@ -148,12 +148,30 @@ def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
         message = messageformat(mentionedtwt,4)
         reply_with_media(mentionedtwt.id_str,message,"ratiodenied.jpeg")
 
-def replyratio():
-    timeline = api.mentions_timeline()
+file_name = "last_tweet.txt"
+def set_last_seen(last_seen, file_name):
+    f_write = open(file_name, 'w')
+    f_write.write(last_seen)
+    f_write.close()
+    print(f"last seen set: {last_seen}")
+    return
+
+def retrieve_last_seen_id(file_name):
+    f_read = open(file_name, 'r')
+    last_seen_id = int(f_read.read().strip())
+    f_read.close()
+    print(f"last seen found {last_seen_id}")
+    return last_seen_id
+
+def replyratio(lastseen):
+    # last_seen_id = retrieve_last_seen_id(file_name)
+    timeline = api.mentions_timeline(since_id=lastseen) #since_id=last_seen_id
     for mention in reversed(timeline):
+        # set_last_seen(mention.id_str,file_name)
+        set_last_seen(mention.id_str,file_name)
         if "check ratio" in (mention.text).lower():
             if validateRatioFormat(mention): # if regular format
-                mention_id = mention.id
+                # mention_id = mention.id
                 prev_tweet = status(mention.in_reply_to_status_id)
                 prevprev = status(prev_tweet.in_reply_to_status_id)
                 applyRatio(mention,prev_tweet,prevprev)
@@ -168,12 +186,31 @@ def replyratio():
             message = messageformat(mention,3)
             reply_no_media(mention.id_str,message)
 
+def deleteMentions4testpurposes():
+    t = api.user_timeline()
+    for i,t1 in enumerate(t):
+        if (t1.in_reply_to_status_id is not None) and (t1.in_reply_to_user_id != 1537546826026319872):
+            api.destroy_status(t1.id)
+
 try:
-    print("testing:\n")
-    # replyratio()
-    print("\nWorks")
+    print("trying")
+    # deleteMentions4testpurposes()
+    # while True:
+    #     replyratio(retrieve_last_seen_id(file_name))
+    #     time.sleep(15)
+    print("done")
 except Exception as err:
     print(err)
+
+# while True:
+#     try:
+#         print("testing:\n")
+#         # retrieve_last_seen_id(file_name)
+#         # replyratio()
+#         print("\nWorks")
+#         time.sleep(15)
+#     except Exception as err:
+#         print(err)
 
 # "trash":
 
@@ -189,24 +226,6 @@ except Exception as err:
 
 # Need to get this to work properly:
 
-'''
-file_name = "last_tweet.txt"
-
-def set_last_seen(last_seen, file_name):
-    f_write = open(file_name, 'w')
-    f_write.write(str(mention_id))
-    f_write.close()
-    print('last seen set ' + str(mention_id))
-    return
-
-def retrieve_last_seen_id(file_name):
-    f_read = open(file_name, 'r')
-    last_seen_id = int(f_read.read().strip())
-    f_read.close()
-    print('last seen found ' + str(last_seen_id))
-    return last_seen_id
-
-'''
 # tweet id check 1538625211339313152
 
 
