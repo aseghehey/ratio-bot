@@ -28,7 +28,7 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
 WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio"]
 NoRatioArr = ["stop wasting my time there's no ratio as of rn 🙄","stop being silly 😐", "no ratio as of rn 😕", "no ratio found 😒","come on there's no ratio there... 😐"]
-LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "respectfully ratio + L", "down bad", "down horrendoulsy", "argument: invalid + ratio"]
+LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio"]
 
 # wmap = {"1537546826026319872":2134,"1906177190":1232,"1516168680660520962":11}
 wmap = {}
@@ -217,7 +217,8 @@ def deleteMentions4testpurposes():
 def main():
     try:
         print("trying")
-        print("main works")
+        # reply_no_media("1539573736126431232","hi @elonhireme_")
+
         # print(datetime.datetime.today().time())
         # print()
         # deleteMentions4testpurposes()
