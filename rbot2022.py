@@ -1,16 +1,20 @@
-from calendar import week
-from cgi import test
+from turtle import clear
 import tweepy
 import time
 import random
 import heapq as hq
+import datetime
+from dotenv import load_dotenv
+import os
 
 def keys():
-    auth = tweepy.OAuthHandler("gRjwpFLL6vBrcHxCvodDP0625","GJRw9s10Vu8NalBvIvgU2nugQT92XZp5D9SXTybXSS2HJsZK9M")
-    auth.set_access_token("1537546826026319872-oJFAjAnSlHDHgEC1JIudZpERAG0H0w", "ZWhna4jAbMWan5sx2RlsEFGq50dsGOAYDzZ1kL6ado17Z" )
+    load_dotenv()
+    auth = tweepy.OAuthHandler(os.getenv('key_1'),os.getenv('key_2'))
+    auth.set_access_token(os.getenv('key_3'),os.getenv('key_4'))
     return auth
 
 api = tweepy.API(keys())
+
 # verification
 try:
     api.verify_credentials()
@@ -94,12 +98,30 @@ def messageWeekly():
     content += f"[🥇] {sayings[0]}\n[🥈] {sayings[1]}\n[🥉] {sayings[-1]}"
     return content
 
+def timetopostWeekly():
+    # post on fridays at 6pm
+    dow = datetime.datetime.today().weekday()
+    t = datetime.datetime.today().time().strftime("%H:%M:%S")
+    if dow == 4 and (t == "18:00:03"):
+        return True
+    return False
+
+# def testpost():
+#     if timetopostWeekly():
+#         api.update_status("posted today at 22:21:00")
+
+def clearmaps():
+    wmap.clear()
+    lmap.clear()
+    dmap.clear()
+
 def makeWeeklypost():
     if messageWeekly()!="":
         api.update_status(messageWeekly())
+        clearmaps()
 
 def reply_with_media(tweet_id, message, media):
-    api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
+    api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id) #,auto_populate_reply_metadata=True
 
 def reply_no_media(tweet_id,message):
     api.update_status(message, in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
@@ -192,15 +214,23 @@ def deleteMentions4testpurposes():
         if (t1.in_reply_to_status_id is not None) and (t1.in_reply_to_user_id != 1537546826026319872):
             api.destroy_status(t1.id)
 
-try:
-    print("trying")
-    # deleteMentions4testpurposes()
-    # while True:
-    #     replyratio(retrieve_last_seen_id(file_name))
-    #     time.sleep(15)
-    print("done")
-except Exception as err:
-    print(err)
+def main():
+    try:
+        print("trying")
+        print("main works")
+        # print(datetime.datetime.today().time())
+        # print()
+        # deleteMentions4testpurposes()
+        # while True:
+        #     if timetopostWeekly():
+        #         makeWeeklypost()
+            
+        #     replyratio(retrieve_last_seen_id(file_name))
+        #     time.sleep(15)
+        print("done")
+    except Exception as err:
+        print(err)
+main()
 
 # while True:
 #     try:
