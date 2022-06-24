@@ -1,5 +1,3 @@
-from curses import KEY_EOL
-from turtle import clear
 import tweepy
 import time
 import random
