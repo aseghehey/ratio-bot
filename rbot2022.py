@@ -8,8 +8,8 @@ import os
 
 def keys():
     load_dotenv()
-    auth = tweepy.OAuthHandler(os.getenv('key_1'),os.getenv('key_2'))
-    auth.set_access_token(os.getenv('key_3'),os.getenv('key_4'))
+    auth = tweepy.OAuthHandler(os.getenv('ACCESS_KEY'),os.getenv('TWITTER_API_KEY'))
+    auth.set_access_token(os.getenv('TWITTER_API_SECRET_KEY'),os.getenv('TWITTER_ACCESS_TOKEN'))
     return auth
 
 api = tweepy.API(keys())
@@ -240,12 +240,13 @@ def deleteMentions4testpurposes():
 #         print("done")
 #     except Exception as err:
 #         print(err)
-def main():
-    try:
+
+def run():
+    while True:
         if timetopostWeekly():
             makeWeeklypost()
         replyratio(retrieve_last_seen_id(file_name))
-    except Exception as err:
-        print(err)
+        time.sleep(15)
 
-main()
+if "__name__" == "__main__":
+    run()
