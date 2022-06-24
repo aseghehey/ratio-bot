@@ -7,7 +7,6 @@ import heapq as hq
 import datetime
 from dotenv import load_dotenv
 import os
-from keep_alive import keep_alive
 
 def keys():
     load_dotenv()
@@ -168,13 +167,13 @@ def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
         message = messageformat(ratioedtwt,1)
-        # reply_with_media(mentionedtwt.id,message,"checkingratio.png")
+        # reply_with_media(mentionedtwt.id,message,"pics/checkingratio.png")
         reply_no_media(mentionedtwt.id,message)
     else:
         # mapcount(mentionedtwt.user.id,lmap) #not necessary
         message = messageformat(mentionedtwt,4)
         reply_no_media(mentionedtwt.id,message)
-        # reply_with_media(mentionedtwt.id,message,"ratiodenied.jpeg")
+        # reply_with_media(mentionedtwt.id,message,"pics/ratiodenied.jpeg")
 
 file_name = "last_tweet.txt"
 def set_last_seen(last_seen, file_name):
@@ -225,22 +224,30 @@ def deleteMentions4testpurposes():
         if (t1.in_reply_to_status_id is not None) and (t1.in_reply_to_user_id != 1537546826026319872):
             api.destroy_status(t1.id)
 
+# def main():
+#     try:
+#         print("trying")
+#         keep_alive()
+#         # reply_no_media("1539573736126431232","hi @elonhireme_")
+
+#         # print(datetime.datetime.today().time())
+#         # print()
+#         # deleteMentions4testpurposes()
+#         while True:
+#              if timetopostWeekly():
+#                  makeWeeklypost()
+            
+#              replyratio(retrieve_last_seen_id(file_name))
+#              time.sleep(15)
+#         print("done")
+#     except Exception as err:
+#         print(err)
 def main():
     try:
-        print("trying")
-        keep_alive()
-        # reply_no_media("1539573736126431232","hi @elonhireme_")
-
-        # print(datetime.datetime.today().time())
-        # print()
-        # deleteMentions4testpurposes()
-        while True:
-             if timetopostWeekly():
-                 makeWeeklypost()
-            
-             replyratio(retrieve_last_seen_id(file_name))
-             time.sleep(15)
-        print("done")
+        if timetopostWeekly():
+            makeWeeklypost()
+        replyratio(retrieve_last_seen_id(file_name))
     except Exception as err:
         print(err)
-main()
+
+# main()
