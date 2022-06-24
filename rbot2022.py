@@ -1,3 +1,4 @@
+from curses import KEY_EOL
 from turtle import clear
 import tweepy
 import time
@@ -6,6 +7,7 @@ import heapq as hq
 import datetime
 from dotenv import load_dotenv
 import os
+from keep_alive import keep_alive
 
 def keys():
     load_dotenv()
@@ -226,6 +228,7 @@ def deleteMentions4testpurposes():
 def main():
     try:
         print("trying")
+        keep_alive()
         # reply_no_media("1539573736126431232","hi @elonhireme_")
 
         # print(datetime.datetime.today().time())
