@@ -248,4 +248,4 @@ def main():
     except Exception as err:
         print(err)
 
-# main()
+main()
