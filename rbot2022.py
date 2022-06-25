@@ -6,41 +6,50 @@ import datetime
 from dotenv import load_dotenv
 import os
 
-def keys():
-    load_dotenv()
+load_dotenv()
+
+def _get_auth_():
     auth = tweepy.OAuthHandler(os.getenv('ACCESS_KEY'),os.getenv('TWITTER_API_KEY'))
     auth.set_access_token(os.getenv('TWITTER_API_SECRET_KEY'),os.getenv('TWITTER_ACCESS_TOKEN'))
     return auth
 
-api = tweepy.API(keys())
-
-# verification
-try:
-    api.verify_credentials()
-    print("verified")
-except:
-    print("couldn't verify")
+api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
+# # verification
+# try:
+#     api.verify_credentials()
+#     print("verified")
+# except:
+#     print("couldn't verify")
 
 mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
 WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio"]
-NoRatioArr = ["stop wasting my time there's no ratio as of rn 🙄","stop being silly 😐", "no ratio as of rn 😕", "no ratio found 😒","come on there's no ratio there... 😐"]
-LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio"]
+NoRatioArr = ["stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
+LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked"]
+ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg"]
+no_ratio_img_arr = ["pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/ratio/ratio10.png"]
 
-# wmap = {"1537546826026319872":2134,"1906177190":1232,"1516168680660520962":11}
 wmap = {}
 lmap = {}
 dmap = {}
 ratiocounter = 1 
 
+def _isprotected_(tweet):
+    if tweet.user.protected:
+        return True
+    return False
+
 ''' Functions: '''
 def validateRatioFormat(tweet): # validates og and parent
     if tweet.in_reply_to_status_id is not None: # if it has a prev
         temp1 = status(tweet.in_reply_to_status_id) # create temp to check og
-        if temp1.in_reply_to_status_id is not None: # if og exists
-            return True 
+        if not _isprotected_(temp1):
+            if temp1.in_reply_to_status_id is not None: # if og exists
+                temp2 = status(tweet.in_reply_to_status_id)
+                if not _isprotected_(temp2):
+                    return True 
     return False
 
 def isMapEmpty(map):
@@ -119,8 +128,10 @@ def makeWeeklypost():
         api.update_status(messageWeekly())
         clearmaps()
 
-def reply_with_media(tweet_id, message, media):
-    api.update_status_with_media(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True) #,auto_populate_reply_metadata=True
+def reply_with_media(tweet_id, message, imagepath):
+    # media = api.media_upload(imagepath)
+    api.update_status_with_media(message,imagepath,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
+    # api.update_status(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True) #,auto_populate_reply_metadata=True
     print("tweeted with media")
 
 def reply_no_media(tweet_id,message):
@@ -130,14 +141,14 @@ def reply_no_media(tweet_id,message):
 def messageformat(id,option):
     content = ""
     if option == 1: # check ratio
-        content = f"{RSFromArray(WratioArr)} 🐐✅\n@{id.user.screen_name} {RSFromArray(LratioArr)}"
+        content = f"{RSFromArray(WratioArr)} 🐐✅\n\n@{id.user.screen_name} {RSFromArray(LratioArr)} 💀"
     elif option == 2: #ratio account status
         stats = acc_status(id.user.id)
         content = f"@{id.user.screen_name} ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯"
     elif option == 3: # incorrect format
         content = f"use the correct format\n\n@ me with 'check ratio' to report a ratio (anyone's) or 'ratio account status' to see your account's ratio score"
     else:# no ratio
-        content = f"{RSFromArray(NoRatioArr)}"
+        content = f"{RSFromArray(NoRatioArr)} 😐"
     return content
 
 def addToMaps(W,L,R):
@@ -161,17 +172,19 @@ def validQuoteRatioFormat(mention):
             return True
     return False
 
+def _randomratiopic_(arr):
+    rand = random.choice(arr)
+    return rand
+
+
 def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
         message = messageformat(ratioedtwt,1)
-        # reply_with_media(mentionedtwt.id,message,"pics/checkingratio.png")
-        reply_no_media(mentionedtwt.id,message)
+        reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
     else:
-        # mapcount(mentionedtwt.user.id,lmap) #not necessary
         message = messageformat(mentionedtwt,4)
-        reply_no_media(mentionedtwt.id,message)
-        # reply_with_media(mentionedtwt.id,message,"pics/ratiodenied.jpeg")
+        reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
 
 file_name = "last_tweet.txt"
 def set_last_seen(last_seen, file_name):
@@ -188,33 +201,48 @@ def retrieve_last_seen_id(file_name):
     print(f"last seen found {last_seen_id}")
     return last_seen_id
 
-botid = 1537546826026319872
-
+def _me_(tweet):
+    botid = 1537546826026319872
+    if tweet.user.id != botid:
+        return False
+    return True
+ 
 def replyratio(lastseen):
     # last_seen_id = retrieve_last_seen_id(file_name)
     timeline = api.mentions_timeline(since_id=lastseen) #since_id=last_seen_id
     for mention in reversed(timeline):
         # set_last_seen(mention.id_str,file_name)
         set_last_seen(mention.id_str,file_name)
-        if mention.author.id != 1537546826026319872:
-            if "check ratio" in (mention.text).lower():
-                if validateRatioFormat(mention):
-                    prev_tweet = status(mention.in_reply_to_status_id)
-                    prevprev = status(prev_tweet.in_reply_to_status_id)
-                    applyRatio(mention,prev_tweet,prevprev)
-                elif validQuoteRatioFormat(mention):
-                    ratio = status(mention.in_reply_to_status_id)
-                    quote = status(ratio.quoted_status_id_str)
-                    applyRatio(mention,ratio,quote)
-            elif "ratio account status" in (mention.text).lower():
-                message = messageformat(mention,2)
-                reply_no_media(mention.id_str,message)
-            else: # incorrect format
+        
+        #checks:
+        if (_isprotected_(mention)):
+            continue
+        if (mention.author.id == 1537546826026319872):
+            continue
+        if "@_ratiobot" not in (mention.text).lower():
+            continue
+
+        if "check ratio" in (mention.text).lower():
+            if validateRatioFormat(mention):
+                prev_tweet = status(mention.in_reply_to_status_id)
+                prevprev = status(prev_tweet.in_reply_to_status_id)
+                applyRatio(mention,prev_tweet,prevprev)
+            elif validQuoteRatioFormat(mention):
+                ratio = status(mention.in_reply_to_status_id)
+                quote = status(ratio.quoted_status_id_str)
+                applyRatio(mention,ratio,quote)
+        elif "ratio account status" in (mention.text).lower():
+            message = messageformat(mention,2)
+            reply_no_media(mention.id_str,message)
+        else: # incorrect format
+            if mention.in_reply_to_status_id is not None:
                 check1 = status(mention.in_reply_to_status_id)
-                print(check1.user.id)
-                if check1.user.id != 1537546826026319872:
+                if not _me_(check1):
                     message = messageformat(mention,3)
                     reply_no_media(mention.id_str,message)
+            else:
+                message = messageformat(mention,3)
+                reply_no_media(mention.id_str,message)
 
 def deleteMentions4testpurposes():
     t = api.user_timeline()
@@ -248,5 +276,11 @@ def run():
         replyratio(retrieve_last_seen_id(file_name))
         time.sleep(15)
 
-if "__name__" == "__main__":
+# if "__name__" == "__main__":
+try:
+    # u = status(1540416454956158976)
+    # print(validateRatioFormat(u))
+    # print(_isprotected_(status(1540416454956158976)))
     run()
+except Exception as err:
+    print(err)

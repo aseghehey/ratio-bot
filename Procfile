@@ -1,1 +1,1 @@
-worker: python rbot2022.py
+worker: python3 rbot2022.py
