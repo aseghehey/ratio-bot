@@ -25,7 +25,7 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
-WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio"]
+WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio","successful ratio!"]
 NoRatioArr = ["stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
 LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked","failed ratio"]
 ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg","pics/ratio/ratio10.png","pics/ratio/IMG_0303.JPG"]
@@ -114,9 +114,16 @@ def timetopostWeekly():
         return True
     return False
 
+# def time_to_reset_map():
+#     dow = datetime.datetime.today().weekday()
+#     t = datetime.datetime.today().time().strftime("%H:%M:%S")
+#     if dow == 4 and (t)
 # def testpost():
 #     if timetopostWeekly():
 #         api.update_status("posted today at 22:21:00")
+
+def checkiffollowing():
+    pass
 
 def clearmaps():
     wmap.clear()
@@ -141,7 +148,8 @@ def reply_no_media(tweet_id,message):
 def messageformat(id,option):
     content = ""
     if option == 1: # check ratio
-        content = f"{RSFromArray(WratioArr)} 🐐✅\n\n@{id.user.screen_name} {RSFromArray(LratioArr)} 💀"
+        content = f"{RSFromArray(WratioArr)} 🐐✅"
+        # content = f"{RSFromArray(WratioArr)} 🐐✅\n\n{id.user.screen_name} {RSFromArray(LratioArr)} 💀"
     elif option == 2: #ratio account status
         stats = acc_status(id.user.id)
         content = f"@{id.user.screen_name} ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯"
@@ -180,11 +188,11 @@ def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
         message = messageformat(ratioedtwt,1)
-        reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
+        # reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
         print(f"ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
     else:
         message = messageformat(mentionedtwt,4)
-        reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
+        # reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
         print(f"no ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
 
 file_name = "last_tweet.txt"
@@ -279,18 +287,20 @@ def deleteMentions4testpurposes():
 def run():
     while True:
         if timetopostWeekly():
-            makeWeeklypost()
+            clearmaps()
+            # makeWeeklypost()
         replyratio(retrieve_last_seen_id(file_name))
         time.sleep(15)
 
 # if "__name__" == "__main__":
 try:
-    # u = status(1540416454956158976)
+    u = status(1540572744697495553)
     # print(validateRatioFormat(u))
     # print(_isprotected_(status(1540416454956158976)))
-    run()
+    # run()
     # t = status(1540713260072067077)
     # print(t)
     # replyratio(retrieve_last_seen_id(file_name))
+    print(u.user)
 except Exception as err:
     print(err)
