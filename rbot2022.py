@@ -27,9 +27,9 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
 WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio"]
 NoRatioArr = ["stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
-LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked"]
-ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg"]
-no_ratio_img_arr = ["pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/ratio/ratio10.png"]
+LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked","failed ratio"]
+ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg","pics/ratio/ratio10.png","pics/ratio/IMG_0303.JPG"]
+no_ratio_img_arr = ["pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/noratio/IMG_0302.JPG"]
 
 wmap = {}
 lmap = {}
@@ -176,15 +176,16 @@ def _randomratiopic_(arr):
     rand = random.choice(arr)
     return rand
 
-
 def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
         message = messageformat(ratioedtwt,1)
         reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
+        print(f"ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
     else:
         message = messageformat(mentionedtwt,4)
         reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
+        print(f"no ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
 
 file_name = "last_tweet.txt"
 def set_last_seen(last_seen, file_name):
@@ -206,6 +207,9 @@ def _me_(tweet):
     if tweet.user.id != botid:
         return False
     return True
+
+def verify_tweet(tweet_id):
+    pass
  
 def replyratio(lastseen):
     # last_seen_id = retrieve_last_seen_id(file_name)
@@ -215,14 +219,14 @@ def replyratio(lastseen):
         set_last_seen(mention.id_str,file_name)
         
         #checks:
-        if (_isprotected_(mention)):
+        if (_isprotected_(mention)): # avoid replying to protected tweets
+            print("tweet is protected")
             continue
-        if (mention.author.id == 1537546826026319872):
-            continue
-        if "@_ratiobot" not in (mention.text).lower():
+        if (mention.author.id == 1537546826026319872): # avoid replying to itself
+            print("i made the mention")
             continue
 
-        if "check ratio" in (mention.text).lower():
+        if ("check ratio" in (mention.text).lower()):
             if validateRatioFormat(mention):
                 prev_tweet = status(mention.in_reply_to_status_id)
                 prevprev = status(prev_tweet.in_reply_to_status_id)
@@ -233,16 +237,19 @@ def replyratio(lastseen):
                 applyRatio(mention,ratio,quote)
         elif "ratio account status" in (mention.text).lower():
             message = messageformat(mention,2)
-            reply_no_media(mention.id_str,message)
-        else: # incorrect format
-            if mention.in_reply_to_status_id is not None:
-                check1 = status(mention.in_reply_to_status_id)
-                if not _me_(check1):
-                    message = messageformat(mention,3)
-                    reply_no_media(mention.id_str,message)
-            else:
-                message = messageformat(mention,3)
-                reply_no_media(mention.id_str,message)
+            print(f"ratio account status targeted - {mention.user.screen_name}")
+            # reply_no_media(mention.id_str,message)
+        # else: # incorrect format
+        #     if mention.in_reply_to_status_id is not None:
+        #         check1 = status(mention.in_reply_to_status_id)
+        #         if not _me_(check1):
+        #             message = messageformat(mention,3)
+        #             print(f"incorrect format 1 - {mention.text} - {mention.user.screen_name}")
+        #             # reply_no_media(mention.id_str,message)
+        #     else:
+        #         message = messageformat(mention,3)
+        #         print(f"incorrect format 2 - {mention.text} - {mention.user.screen_name}")
+        #         # reply_no_media(mention.id_str,message)
 
 def deleteMentions4testpurposes():
     t = api.user_timeline()
@@ -282,5 +289,8 @@ try:
     # print(validateRatioFormat(u))
     # print(_isprotected_(status(1540416454956158976)))
     run()
+    # t = status(1540713260072067077)
+    # print(t)
+    # replyratio(retrieve_last_seen_id(file_name))
 except Exception as err:
     print(err)
