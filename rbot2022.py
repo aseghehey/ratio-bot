@@ -25,8 +25,9 @@ mention_id = 1 # will be used to keep track of the mentions we have gone through
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
-WratioArr = ["ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W", "dub","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio","successful ratio!"]
-NoRatioArr = ["stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
+WratioArr = ["ratio + no one cares about that tweet + guy who tweeted it needs to get a job 💀","ratio + YB better + delete cringe tweet + no one really asked 💀","ratio + tweet's not even funny + didn't laugh 😐 + cancelled","after checking VAR 🎥 I have carefully decided to award the ratio.","after reviewing the tweets, me and my team of officials have detected a ratio!","immaculate ratio must be framed 🖼","someone took the L and is down horrendously","tell that guy he got ratio'd + the tweet is irrelevant + no one cares","ratio bot decides to award the ratio here.","what an outstanding ratio. buddy above got cooked 😩","ratio so fire it needs to be framed","ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio","successful ratio!"]
+NoRatioArr = ["hmmmmm 🤔that doesn't look like a ratio to me","failed ratio + YB better","ratio is no good + not found","ratio nowhere to be found","stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
+
 LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked","failed ratio"]
 ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg","pics/ratio/ratio10.png","pics/ratio/IMG_0303.JPG"]
 no_ratio_img_arr = ["pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/noratio/IMG_0302.JPG"]
@@ -103,14 +104,14 @@ def messageWeekly():
         tmpuser = api.get_user(user_id=acc)
         tmp = f"@{tmpuser.screen_name} with {val*-1} ratio(s)"
         sayings.append(tmp)
-    content += f"[🥇] {sayings[0]}\n[🥈] {sayings[1]}\n[🥉] {sayings[-1]}"
+    content += f"[🥇] {sayings[0]}\n[🥈] {sayings[1]}\n[🥉] {sayings[-1]}\n\nit resets every day at 6pm"
     return content
 
 def timetopostWeekly():
     # post on fridays at 6pm
     dow = datetime.datetime.today().weekday()
     t = datetime.datetime.today().time().strftime("%H:%M:%S")
-    if dow == 4 and (t == "18:00:03"):
+    if t == "18:00:00": #dow == 4 and 
         return True
     return False
 
@@ -188,11 +189,11 @@ def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
         message = messageformat(ratioedtwt,1)
-        # reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
+        reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
         print(f"ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
     else:
         message = messageformat(mentionedtwt,4)
-        # reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
+        reply_with_media(mentionedtwt.id,message,_randomratiopic_(no_ratio_img_arr))
         print(f"no ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
 
 file_name = "last_tweet.txt"
@@ -246,7 +247,7 @@ def replyratio(lastseen):
         elif "ratio account status" in (mention.text).lower():
             message = messageformat(mention,2)
             print(f"ratio account status targeted - {mention.user.screen_name}")
-            # reply_no_media(mention.id_str,message)
+            reply_no_media(mention.id_str,message)
         # else: # incorrect format
         #     if mention.in_reply_to_status_id is not None:
         #         check1 = status(mention.in_reply_to_status_id)
@@ -294,13 +295,13 @@ def run():
 
 # if "__name__" == "__main__":
 try:
-    u = status(1540572744697495553)
+    # u = status(1540572744697495553)
     # print(validateRatioFormat(u))
     # print(_isprotected_(status(1540416454956158976)))
-    # run()
+    run()
     # t = status(1540713260072067077)
     # print(t)
     # replyratio(retrieve_last_seen_id(file_name))
-    print(u.user)
+    # print(u.user)
 except Exception as err:
     print(err)
