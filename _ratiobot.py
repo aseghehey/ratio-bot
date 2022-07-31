@@ -10,16 +10,10 @@ load_dotenv()
 
 def _get_auth_():
     auth = tweepy.OAuthHandler(os.getenv('ACCESS_KEY'),os.getenv('TWITTER_API_KEY'))
-    auth.set_access_token(os.getenv('TWITTER_API_SECRET_KEY'),os.getenv('TWITTER_ACCESS_TOKEN'))
+    auth.set_access_token(os.getenv('TWITTER_ACCESS_TOKEN'), os.getenv('TWITTER_API_SECRET_KEY'))
     return auth
 
 api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
-# # verification
-# try:
-#     api.verify_credentials()
-#     print("verified")
-# except:
-#     print("couldn't verify")
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
@@ -38,25 +32,45 @@ wmap = {}
 lmap = {}
 dmap = {}
 
-# was going to use to count how many ratios, but not needed since i can see how many tweets the bot has put out
-ratiocounter = 1 
+''' Tweet Verification '''
 
 # check if tweet is protected because bot cant reply to those
-def _isprotected_(tweet):
+def isProtected(tweet):
     if tweet.user.protected:
         return True
     return False
 
-''' Functions: '''
+def isValidTweet(tweet):
+    for i in range(len(tweet.entities['user_mentions'])):
+            if tweet.in_reply_to_screen_name in tweet.entities['user_mentions'][i]['screen_name']:
+                return True
+    return False
 
+def deleted_tweet(id):
+    try:
+        status(id)
+        return False
+    except tweepy.errors.TweepyException as err:
+        return True
+
+''' Functions: '''
 def validateRatioFormat(tweet): # validates that there are two tweets above (correct format)
     if tweet.in_reply_to_status_id is not None: 
-        temp1 = status(tweet.in_reply_to_status_id) 
-        if not _isprotected_(temp1):
-            if temp1.in_reply_to_status_id is not None: 
-                temp2 = status(tweet.in_reply_to_status_id)
-                if not _isprotected_(temp2):
-                    return True 
+        if isValidTweet(tweet):
+            tweet_2 = status(tweet.in_reply_to_status_id) 
+            if not isProtected(tweet_2) and (tweet_2.in_reply_to_status_id is not None): 
+                if isValidTweet(tweet_2):
+                    tweet_1 = status(tweet_2.in_reply_to_status_id)
+                    if not isProtected(tweet_1):
+                        return True 
+    return False
+
+
+def validQuoteRatioFormat(mention):
+    if mention.in_reply_to_status_id is not None:
+        ratiotwt = status(mention.in_reply_to_status_id)
+        if ratiotwt.is_quote_status and not deleted_tweet(ratiotwt.quoted_status_id) :
+            return True
     return False
 
 # checks if the map is empty, would be used for the weekly wrapped, if i did it
@@ -119,6 +133,7 @@ def messageWeekly():
     content += f"[🥇] {sayings[0]}\n[🥈] {sayings[1]}\n[🥉] {sayings[-1]}\n\nit resets every day at 6pm"
     return content
 
+
 # would be used to determine when its time to post, but changed the function
 # will now use it for when its 6pm, so bot clears map - for memory purposes
 def timetopostWeekly():
@@ -128,17 +143,6 @@ def timetopostWeekly():
     if t == "18:00:00": #dow == 4 and 
         return True
     return False
-
-# def time_to_reset_map():
-#     dow = datetime.datetime.today().weekday()
-#     t = datetime.datetime.today().time().strftime("%H:%M:%S")
-#     if dow == 4 and (t)
-# def testpost():
-#     if timetopostWeekly():
-#         api.update_status("posted today at 22:21:00")
-
-def checkiffollowing():
-    pass
 
 #to clear all maps at once
 def clearmaps():
@@ -154,9 +158,7 @@ def makeWeeklypost():
 
 # posting a reply with picture
 def reply_with_media(tweet_id, message, imagepath):
-    # media = api.media_upload(imagepath)
     api.update_status_with_media(message,imagepath,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True)
-    # api.update_status(message,media,in_reply_to_status_id=tweet_id,auto_populate_reply_metadata=True) #,auto_populate_reply_metadata=True
     print("tweeted with media")
 
 # posting a reply without picture
@@ -169,7 +171,6 @@ def messageformat(id,option):
     content = ""
     if option == 1: # check ratio
         content = f"{RSFromArray(WratioArr)} 🐐✅"
-        # content = f"{RSFromArray(WratioArr)} 🐐✅\n\n{id.user.screen_name} {RSFromArray(LratioArr)} 💀"
     elif option == 2: #ratio account status
         stats = acc_status(id.user.id)
         content = f"@{id.user.screen_name} ratio status:\n\nWins: {stats[0]} ✅\nLosses: {stats[1]} ⬇️\nRatios reported: {stats[2]} 💯"
@@ -187,21 +188,11 @@ def addToMaps(W,L,R):
 
 # calculates if theres a ratio
 def calculateratio(tweetID,prevtweetID):
-    if tweetID.favorite_count > prevtweetID.favorite_count:
-        return True
-    else:
-        return False
+    return tweetID.favorite_count > prevtweetID.favorite_count
 
 # given an ID, returns the status/tweet
 def status(tweetID):
     return api.get_status(tweetID)
-
-def validQuoteRatioFormat(mention):
-    if mention.in_reply_to_status_id is not None:
-        ratiotwt = status(mention.in_reply_to_status_id)
-        if ratiotwt.is_quote_status:
-            return True
-    return False
 
 # like the random saying array, redundant i know but i forgot i had the other function 
 def _randomratiopic_(arr):
@@ -212,7 +203,7 @@ def _randomratiopic_(arr):
 def applyRatio(mentionedtwt, ratiotwt, ratioedtwt):
     if calculateratio(ratiotwt,ratioedtwt):
         addToMaps(ratiotwt,ratioedtwt,mentionedtwt)
-        message = messageformat(ratioedtwt,1)
+        message = messageformat(ratioedtwt,1) + check_Android_L(ratioedtwt)
         reply_with_media(mentionedtwt.id,message, _randomratiopic_(ratio_img_arr))
         print(f"ratio\n{ratiotwt.text}\n{ratioedtwt.text}\n")
     else:
@@ -243,24 +234,21 @@ def _me_(tweet):
     if tweet.user.id != botid:
         return False
     return True
-
-def verify_tweet(tweet_id):
-    pass
  
+def check_Android_L(tweet):
+    if "Android" in tweet.source:
+        return " + Twitter for Android 😭"
+    return ""
+
 # execution of functionality
 def replyratio(lastseen):
-    # last_seen_id = retrieve_last_seen_id(file_name)
     timeline = api.mentions_timeline(since_id=lastseen) #since_id=last_seen_id
     for mention in reversed(timeline):
-        # set_last_seen(mention.id_str,file_name)
         set_last_seen(mention.id_str,file_name)
-        
         #checks:
-        if (_isprotected_(mention)): # avoid replying to protected tweets
-            print("tweet is protected")
-            continue
-        if (mention.author.id == 1537546826026319872): # avoid replying to itself
-            print("i made the mention")
+        # avoid replying to protected, deleted or tweets made by the bot
+        if isProtected(mention) or deleted_tweet(mention.id) or (mention.author.id == 1537546826026319872):
+            print('continuing') 
             continue
 
         if ("check ratio" in (mention.text).lower()):
@@ -277,19 +265,6 @@ def replyratio(lastseen):
             print(f"ratio account status targeted - {mention.user.screen_name}")
             reply_no_media(mention.id_str,message)
 
-    # Had to give up on this. Twitter didnt like it. Tbf, I get it. It spammed. It kept spamming everytime it was mentioned and the correct format wasnt there. 
-        # else: # incorrect format
-        #     if mention.in_reply_to_status_id is not None:
-        #         check1 = status(mention.in_reply_to_status_id)
-        #         if not _me_(check1):
-        #             message = messageformat(mention,3)
-        #             print(f"incorrect format 1 - {mention.text} - {mention.user.screen_name}")
-        #             # reply_no_media(mention.id_str,message)
-        #     else:
-        #         message = messageformat(mention,3)
-        #         print(f"incorrect format 2 - {mention.text} - {mention.user.screen_name}")
-        #         # reply_no_media(mention.id_str,message)
-
 # for testing purposes
 def deleteMentions4testpurposes():
     t = api.user_timeline()
@@ -301,11 +276,11 @@ def run():
     while True:
         if timetopostWeekly():
             clearmaps()
-            # makeWeeklypost()
         replyratio(retrieve_last_seen_id(file_name))
-        time.sleep(15)
-
+        time.sleep(180)
+    
 try:
     run()
 except Exception as err:
     print(err)
+
