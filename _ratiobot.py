@@ -17,15 +17,15 @@ api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
 
 ''' Variables: '''
 # Arrays for guy who ratiod, guy who got ratiod and for no ratio found
-WratioArr = ["ratio + no one cares about that tweet + guy who tweeted it needs to get a job 💀","ratio + YB better + delete cringe tweet + no one really asked 💀","ratio + tweet's not even funny + didn't laugh 😐 + cancelled","after checking VAR 🎥 I have carefully decided to award the ratio.","after reviewing the tweets, me and my team of officials have detected a ratio!","immaculate ratio must be framed 🖼","someone took the L and is down horrendously","tell that guy he got ratio'd + the tweet is irrelevant + no one cares","ratio bot decides to award the ratio here.","what an outstanding ratio. buddy above got cooked 😩","ratio so fire it needs to be framed","ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio","successful ratio!"]
-NoRatioArr = ["hmmmmm 🤔that doesn't look like a ratio to me","failed ratio + YB better","ratio is no good + not found","ratio nowhere to be found","stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio as of rn", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
+WratioArr = ["Don't move I'm capturing this ratio 😮‍💨","ratio + no one cares about that tweet + guy who tweeted it needs to get a job 💀","ratio + YB better + delete cringe tweet + no one really asked 💀","ratio + tweet's not even funny + didn't laugh 😐 + cancelled","after checking VAR 🎥 I have carefully decided to award the ratio.","after reviewing the tweets, me and my team of officials have detected a ratio!","immaculate ratio must be framed 🖼","someone took the L and is down horrendously","tell that guy he got ratio'd + the tweet is irrelevant + no one cares","ratio bot decides to award the ratio here.","what an outstanding ratio. buddy above got cooked 😩","ratio so fire it needs to be framed","ice cold ratio", "outstanding ratio", "ratiooooo", "ratio detected!","W","fire ratio", "VAR DECISION: ratio", "ratio identified + W", "we have uncovered a remarkable ratio","successful ratio!"]
+NoRatioArr = ["seek help 😐", "silly guy", "seek help", "0 females","touch grass","bro is a clown theres no ratio" ,"jobless...", "hmmmmm 🤔that doesn't look like a ratio to me","failed ratio + YB better","ratio is no good + not found","ratio nowhere to be found","stop wasting my time there's no ratio","stop being silly there's no ratio", "no ratio", "no ratio found","come on there's no ratio there...", "no ratio g", "ratio denied", "failed ratio lol"]
 
 # had to stop using LratioArr because twitter complained that it violated the guidelines
 LratioArr = ["L + ratio + YB better", "hold this L", "ratio + L + get a job", "ratiooood","hold this L respectfully", "ratio + L", "down bad", "down horrendoulsy", "invalid argument + ratio","hold this L son", "ratio bozo","hold this L buddy", "buddy got cooked","failed ratio"]
 
 # array with images
-ratio_img_arr = ["pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg","pics/ratio/ratio10.png","pics/ratio/IMG_0303.JPG"]
-no_ratio_img_arr = ["pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/noratio/IMG_0302.JPG"]
+ratio_img_arr = ["pics/ratio/20210917_175607.jpg", "pics/ratio/20220307_173506.jpg", "pics/ratio/20220509_022117.jpg", "pics/ratio/20220611_200238.jpg","pics/ratio/checkingratio.png","pics/ratio/decisionratio.jpeg","pics/ratio/rratio.jpg","pics/ratio/ratio10.png","pics/ratio/IMG_0303.JPG"]
+no_ratio_img_arr = ["pics/noratio/20220311_185917.jpg", "pics/noratio/20220401_082622.jpg", "pics/noratio/20220504_132953.jpg", "pics/noratio/FL0lsnfaAAAk2gV.jpg", "pics/noratio/mrcrabs.jpeg","pics/noratio/no ratio.jpeg","pics/noratio/noratio1.jpeg","pics/noratio/ratiodenied.jpeg","pics/noratio/vardecision_noratio.jpeg","pics/noratio/IMG_0302.JPG"]
 
 # maps to keep track of wins, losses and draws
 wmap = {}
@@ -277,7 +277,7 @@ def run():
         if timetopostWeekly():
             clearmaps()
         replyratio(retrieve_last_seen_id(file_name))
-        time.sleep(180)
+        time.sleep(120)
     
 try:
     run()
