@@ -1,5 +1,8 @@
 # Ratio Bot 🤖
->![Profile picture](pics/readmepics/ref.png) 
+
+>![Profile picture](src/pics/readmepics/ref.png) 
+
+<a href="https://twitter.com/_ratiobot?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @_ratiobot</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ## Introduction
 
@@ -17,8 +20,9 @@
 
 > 3️⃣ To get your ratio report, mention me with "@_ratiobot ratio account status"
 
-## Screenshots 📸
->![How to use](pics/readmepics/1541111232513589248.png)
+## How to use it 📸
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">how to use the ratio bot <a href="https://t.co/baxYEFcnwV">https://t.co/baxYEFcnwV</a></p>&mdash; ratio bot 🤖 (@_ratiobot) <a href="https://twitter.com/_ratiobot/status/1541111232513589248?ref_src=twsrc%5Etfw">June 26, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 >Hosted on a Raspberry Pi
 
