@@ -1,27 +1,3 @@
-'''
-MIT License
-
-Copyright (c) 2022 Emanuel Aseghehey, Keonte Nightingale and Pratul Neupane
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-'''
-
 import tweepy
 import time
 import random
@@ -29,6 +5,7 @@ import heapq as hq
 import datetime
 from dotenv import load_dotenv
 import os
+import db_functions
 
 load_dotenv()
 
@@ -223,11 +200,21 @@ def sendTweet(mentionedtwt, ratiotwt, ratioedtwt):
     if isRatio(ratiotwt,ratioedtwt):
         # addToMaps(ratiotwt, ratioedtwt, mentionedtwt)
         message = messageFormat(ratioedtwt,1)
-        # reply_with_media(mentionedtwt.id, message, readFromFile('textfiles/pictures/yesratio.txt'))
+
+        try:
+            reply_with_media(mentionedtwt.id, message, readFromFile('textfiles/pictures/yesratio.txt'))
+        except Exception as err:
+            print('RWM1:',err)
+
         print(f"RATIO {mentionedtwt.id}")
     else:
         message = messageFormat(mentionedtwt, 4)
-        # reply_with_media(mentionedtwt.id, message, readFromFile('textfiles/pictures/noratio.txt'))
+
+        try:
+            reply_with_media(mentionedtwt.id, message, readFromFile('textfiles/pictures/noratio.txt'))
+        except Exception as err:
+            print('RWM2:',err)
+
         print(f"NORATIO {mentionedtwt.id}")
 
 ''' Tweet ID text file '''
@@ -235,7 +222,6 @@ def set_last_seen(last_seen, file_name):
     f_write = open(file_name, 'w')
     f_write.write(last_seen)
     f_write.close()
-    return
 
 def retrieve_last_seen_id(file_name):
     f_read = open(file_name, 'r')
@@ -309,6 +295,8 @@ def deleteMentions4testpurposes():
 if __name__ == "__main__":
     try:
         api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
-        replyratio(retrieve_last_seen_id("textfiles/last_tweet.txt"))
+        object = status(1594110928269836288)
+        print(type(object.in_reply_to_status_id))
+        # replyratio(retrieve_last_seen_id("textfiles/last_tweet.txt"))
     except Exception as err:
         print(f'ERROR: {err}')
