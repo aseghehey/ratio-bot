@@ -5,7 +5,7 @@ import heapq as hq
 import datetime
 from dotenv import load_dotenv
 import os
-import db_functions
+import src.db_functions as db_functions
 
 load_dotenv()
 
