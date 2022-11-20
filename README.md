@@ -2,8 +2,6 @@
 
 >![Profile picture](src/pics/readmepics/ref.png) 
 
-<p><a href="https://twitter.com/_ratiobot?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow @_ratiobot</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><p>
-
 ## Introduction
 
 > A bot that checks if a tweet is a possible ratio. Mention me under any tweet with the "check ratio" keyword 💫
@@ -20,9 +18,8 @@
 
 > 3️⃣ To get your ratio report, mention me with "@_ratiobot ratio account status"
 
-## How to use it 📸
-
-<p><blockquote class="twitter-tweet"><p lang="en" dir="ltr">how to use the ratio bot <a href="https://t.co/baxYEFcnwV">https://t.co/baxYEFcnwV</a></p>&mdash; ratio bot 🤖 (@_ratiobot) <a href="https://twitter.com/_ratiobot/status/1541111232513589248?ref_src=twsrc%5Etfw">June 26, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><p><br><br>
+## Screenshots 📸
+>![How to use](src/pics/readmepics/1541111232513589248.png)
 
 >Hosted on a Raspberry Pi
 
