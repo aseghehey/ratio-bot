@@ -13,7 +13,6 @@ def isValidTweet(tweet):
                 return True
     return False
 
-# if tweet no longer exists -> error
 def isDeletedTweet(api, id):
     try:
         status(api, id)
