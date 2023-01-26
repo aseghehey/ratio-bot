@@ -7,8 +7,8 @@ if __name__ == "__main__":
     try:
 
         api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
-        # replyratio(getLastSeen("textfiles/last_tweet.txt"))
-
+        replyratio(api, getLastSeen())
+        # print(status(api, 1598874134863556608))
 
         # test
         # ob1 = status(api, 1618048774437490688)

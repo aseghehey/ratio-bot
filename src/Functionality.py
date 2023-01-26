@@ -24,13 +24,14 @@ def validQuoteRatioFormat(api, mention):
 # functionality of the code
 def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     if isRatio(ratiotwt, ratioedtwt):
-        message = getRandomMessage(f'src/assets/textfiles/messages/yesratio.txt')
-        imagepath = getRandomMessage('src/assets/textfiles/pictures/yesratio.txt')
+        message = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/messages/yesratio.txt')
+        imagepath = getRandomMessage('/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/pictures/yesratio.txt')
         print(message, imagepath, mentionedtwt.id)
         # api.update_status_with_media(message, imagepath, in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
     else:
-        message = getRandomMessage(f'src/assets/textfiles/messages/noratio.txt')
-        imagepath = getRandomMessage('src/assets/textfiles/pictures/noratio.txt')
+        # /Users/emanuelaseghehey/Development/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/last_tweet.txt
+        message = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/messages/noratio.txt')
+        imagepath = getRandomMessage('/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/pictures/noratio.txt')
         print(message, imagepath, mentionedtwt.id)
         # api.update_status_with_media(message, imagepath, in_reply_to_status_id=mentionedtwt.id, auto_populate_reply_metadata=True)
 
@@ -42,12 +43,12 @@ def replyratio(api, lastseen):
         if isProtected(mention) or isDeletedTweet(api, mention.id): # or _me_(mention):
             continue
         
-        if validateRatioFormat(mention):
+        if validateRatioFormat(api, mention):
             previousTweet = status(api, mention.in_reply_to_status_id)
             beforePrevious = status(api, previousTweet.in_reply_to_status_id)
             sendTweet(api, mention, previousTweet, beforePrevious)
-        elif validQuoteRatioFormat(mention):
+        elif validQuoteRatioFormat(api, mention):
             ratioTweet = status(api, mention.in_reply_to_status_id)
             quoteTweet = status(api, ratioTweet.quoted_status_id_str)
             sendTweet(api, mention, ratioTweet, quoteTweet)    
-        writeLastSeen(mention.id_str, "textfiles/last_tweet.txt")
+        writeLastSeen(mention.id_str)
