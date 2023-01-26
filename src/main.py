@@ -2,18 +2,17 @@ from Verification import *
 from Auth import _get_auth_
 from FileOperations import *
 from Functionality import *
+import time
 
 if __name__ == "__main__":
     try:
 
         api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
-        replyratio(api, getLastSeen())
-        # print(status(api, 1598874134863556608))
-
-        # test
-        # ob1 = status(api, 1618048774437490688)
-        # print(ob1.in_reply_to_status_id_str)
-        # print(ob1.entities['user_mentions'][1]['id_str'])
+    
+        while True:
+            print('started')
+            replyratio(api, getLastSeen())
+            time.sleep(1)
 
     except Exception as err:
         print(f'ERROR: {err}')
