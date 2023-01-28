@@ -1,6 +1,6 @@
 # Ratio Bot 🤖
 
->![Profile picture](src/pics/readmepics/ref.png) 
+>![Profile picture](/Ratio-bot/src/assets/pics/readmepics/ref.png) 
 
 ## Introduction
 
@@ -21,9 +21,7 @@
 ## Screenshots 📸
 >![How to use](src/pics/readmepics/1541111232513589248.png)
 
->Hosted on a Raspberry Pi
-
->Worked on it with @pratuln and @knightingale242
+Received contributions from Keonte Nightingale and Pratul Neupane
 
 <h3 align="left">Support:</h3>
 <p><a href="https://www.buymeacoffee.com/emanuelase"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="emanuelase" /></a></p><br><br>

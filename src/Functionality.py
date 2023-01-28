@@ -23,17 +23,13 @@ def validQuoteRatioFormat(api, mention):
 
 # functionality of the code
 def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
+    extension = "noratio.txt"
     if isRatio(ratiotwt, ratioedtwt):
-        message = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/messages/yesratio.txt')
-        imagepath = getRandomMessage('/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/pictures/yesratio.txt')
-        print(message, imagepath, mentionedtwt.id)
-        # api.update_status_with_media(message, imagepath, in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-    else:
-        # /Users/emanuelaseghehey/Development/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/last_tweet.txt
-        message = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/messages/noratio.txt')
-        imagepath = getRandomMessage('/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/pictures/noratio.txt')
-        print(message, imagepath, mentionedtwt.id)
-        # api.update_status_with_media(message, imagepath, in_reply_to_status_id=mentionedtwt.id, auto_populate_reply_metadata=True)
+        extension = "yesratio.txt"
+    message = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/messages/{extension}')
+    imagepath = getRandomMessage(f'/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/pictures/{extension}')
+    # api.update_status_with_media(message, imagepath, in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+    print(message, imagepath, mentionedtwt.id)
 
 def replyratio(api, lastseen):
     mentionTimeline = api.mentions_timeline(since_id=lastseen) #since_id=last_seen_id
