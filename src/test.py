@@ -3,6 +3,8 @@ from Verification import status
 import tweepy
 import requests
 import shutil
+from pathlib import Path 
+import os
 from PIL import Image
 
 def profilePictureUrl(tweet):
@@ -31,13 +33,20 @@ def downloadProfilePic(url):
     return False
 
 if __name__ == "__main__":
-    api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
-    test = status(api, 1597700811102224385)
-    # downloadProfilePic(profilePictureUrl(test))
 
-    read_image = Image.open("/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/pics/downloads/pic.jpg")
-    bw = read_image.convert('L')
+    picpath = "/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/pics/downloads/pic.jpg"
+    if (Path(picpath).is_file()):
+        os.remove(picpath)
+
+    api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
+    test = status(api, 1602229560342630400)
+    downloadProfilePic(profilePictureUrl(test))
+
+    read_image = Image.open(picpath)
+    # read_image = read_image.convert('L')
+    read_image.save(picpath)
     l = Image.open("/Users/emanuelaseghehey/Development/Ratio-bot/src/L.png")
-    bw.paste(l, (200,200), mask=l)
-    bw.show()
-    # bw.save("g.jpg")
+
+    read_image.paste(l, (100,100), mask=l)
+    read_image.show()
+
