@@ -27,3 +27,8 @@ def isRatio(tweetID,prevtweetID):
 # given an ID, returns the status/tweet
 def status(api, tweetID):
     return api.get_status(tweetID)
+
+def isRatioRequest(mentionText):
+    tweetSet = set([x.lower() for x in mentionText.split(' ')])
+    reqSet = {'check', 'ratio'}
+    return reqSet.issubset(tweetSet)

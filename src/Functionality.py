@@ -39,7 +39,7 @@ def replyratio(api, lastseen):
 
     for mention in reversed(mentionTimeline):
         #checks:
-        if isProtected(mention) or isDeletedTweet(api, mention.id): # or _me_(mention):
+        if isProtected(mention) or isDeletedTweet(api, mention.id) or (not isRatioRequest(mention.text)): # or _me_(mention):
             continue
         
         if validateRatioFormat(api, mention):
