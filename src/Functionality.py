@@ -28,7 +28,7 @@ def validQuoteRatioFormat(api, mention):
 def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     if isRatio(ratiotwt, ratioedtwt):
         imageEdit(ratioedtwt)
-        print(f'ratio: {getRandomMessage("assets/textfiles/messages/yesratio.txt")}')
+        # print(f'ratio: {getRandomMessage("assets/textfiles/messages/yesratio.txt")}')
         api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
         return
     api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)

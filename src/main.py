@@ -10,9 +10,10 @@ if __name__ == "__main__":
         api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
     
         while True:
-            print('started')
-            replyratio(api, getLastSeen())
-            time.sleep(1)
+            last_id = getLastSeen()
+            print(f'at {last_id}')
+            replyratio(api, last_id)
+            time.sleep(60)
 
     except Exception as err:
         print(f'ERROR: {err}')
