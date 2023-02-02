@@ -14,11 +14,11 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     if isRatio(ratiotwt, ratioedtwt):
         imageEdit(ratioedtwt)
         # print(f'ratio: {getRandomMessage("assets/textfiles/messages/yesratio.txt")}')
-        print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
-        # api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+        # print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
+        api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
         return
-    print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
-    # api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+    # print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
+    api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
 
 
 def replyratio(api, lastseen):
@@ -46,11 +46,12 @@ def replyratio(api, lastseen):
             print('NORMAL FORMAT')   
             previousTweet = normalFormat[1][0]
             beforePrevious = normalFormat[1][1]
+            sendTweet(api, mention, previousTweet, beforePrevious)  
         else:
             print('QUOTE FORMAT')
             previousTweet = quoteFormat[1][0]
-            beforePrevious[1][1]
-        sendTweet(api, mention, previousTweet, beforePrevious)  
+            beforePrevious = quoteFormat[1][1]
+            sendTweet(api, mention, previousTweet, beforePrevious)  
         writeLastSeen(mention.id_str)
 
 def profilePictureUrl(tweet):
