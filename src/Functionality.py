@@ -33,7 +33,7 @@ def replyratio(api, lastseen):
 
         print(f'at {mention.id_str}')
         #checks:
-        if isProtected(mention) or (not isValidTweet(api, mention.id)) or (not isRatioRequest(mention.text)):
+        if isProtected(mention) or (not isValidTweet(api, mention.id)) or (not isRatioRequest(mention.text)) or (mention.user.id == 1537546826026319872):
             print(f'FAIL CHECK')
             continue
         
