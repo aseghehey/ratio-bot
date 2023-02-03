@@ -156,7 +156,7 @@ cython_debug/
 .vscode/
 test.txt
 src/assets/pics/downloads/pic.jpg
-src/assets/pics/*
+src/assets/pics/*   
 src/test.py
 
 

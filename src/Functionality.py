@@ -14,10 +14,10 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     if isRatio(ratiotwt, ratioedtwt):
         imageEdit(ratioedtwt)
         # print(f'ratio: {getRandomMessage("assets/textfiles/messages/yesratio.txt")}')
-        # print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
+        print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
         api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
         return
-    # print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
+    print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
     api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
 
 
@@ -69,7 +69,7 @@ def profilePictureUrl(tweet):
         if image_url[l] != '.':
             l += 1
         r += 1
-    add = "_400x400"[::-1]
+    add = "_400x400"[::-1]  
     new_url = image_url[:l + 1] + add + image_url[r + 1:]
     new_url = new_url[::-1]
     print('Url operation done sucessfully')

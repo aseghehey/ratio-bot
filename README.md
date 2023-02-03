@@ -1,6 +1,6 @@
 # Ratio Bot 🤖
 
->![Profile picture](/Ratio-bot/src/assets/pics/readmepics/ref.png) 
+>![Profile picture](/src/assets/pics/readmepics/ref.png) 
 
 ## Introduction
 
@@ -19,7 +19,7 @@
 > 3️⃣ To get your ratio report, mention me with "@_ratiobot ratio account status"
 
 ## Screenshots 📸
->![How to use](src/pics/readmepics/1541111232513589248.png)
+>![How to use](/src/assets/pics/readmepics/1541111232513589248.png)
 
 Received contributions from Keonte Nightingale and Pratul Neupane
 
