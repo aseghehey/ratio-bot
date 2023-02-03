@@ -10,13 +10,13 @@ def getRandomMessage(filename):
 ''' Tweet ID text file '''
 def writeLastSeen(content):
     print('id written')
-    f_write = open("/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/last_tweet.txt", 'w')
+    f_write = open("assets/textfiles/last_tweet.txt", 'w')
     f_write.write(content)
     f_write.close()
 
 def getLastSeen(): 
     print('id accessed')
-    f_read = open("/Users/emanuelaseghehey/Development/Ratio-bot/src/assets/textfiles/last_tweet.txt", 'r')
+    f_read = open("assets/textfiles/last_tweet.txt", 'r')
     last_seen_id = int(f_read.read().strip())
     f_read.close()
     return last_seen_id

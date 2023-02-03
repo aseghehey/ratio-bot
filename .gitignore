@@ -155,10 +155,6 @@ cython_debug/
 # local stuff
 .vscode/
 test.txt
-src/assets/pics/downloads/pic.jpg
-src/assets/pics/*   
-src/test.py
-
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
