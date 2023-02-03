@@ -12,10 +12,12 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     '''
     print('sendTweetOn')
     if isRatio(ratiotwt, ratioedtwt):
-        imageEdit(ratioedtwt)
-        # print(f'ratio: {getRandomMessage("assets/textfiles/messages/yesratio.txt")}')
-        print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
-        api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+        if imageEdit(ratioedtwt):
+            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
+        else:
+            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/ratio/decisionratio.jpeg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            print(f'UNI 1')
         return
     print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
     api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
@@ -96,13 +98,17 @@ def imageEdit(tweet):
     picpath = "assets/pics/downloads/pic.jpg" # location of image    
     if (Path(picpath).is_file()):
         os.remove(picpath)
-    downloadProfilePic(profilePictureUrl(tweet)) 
+    downloadProfilePic(profilePictureUrl(tweet))
+ 
     image = Image.open(picpath) 
     gradient = Image.open("assets/pics/edit/gradient.png") 
     letter = Image.open("assets/pics/edit/L.png") 
     ''' Pasting objects onto image and saving it in desired folder '''
-    image.paste(gradient,(0,0), gradient)
-    image.paste(letter, (100,100), letter)
-    image.save(picpath)
-
-    print('Image done succesfully')
+    try:
+        image.paste(gradient,(0,0), gradient)
+        image.paste(letter, (100,100), letter)
+        image.save(picpath)
+        print('Image done succesfully')
+        return True
+    except Exception as e:
+        return False

@@ -6,7 +6,6 @@ import time
 
 if __name__ == "__main__":
     try:
-
         api = tweepy.API(_get_auth_(), wait_on_rate_limit=True)
         while True:
             last_id = getLastSeen()
