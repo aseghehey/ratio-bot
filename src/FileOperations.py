@@ -3,7 +3,7 @@ import random
 def getRandomMessage(filename):
     f_in = open(filename, 'r')
     messageArr = f_in.readlines()
-    index = random.randrange(len(messageArr) - 1)
+    index = random.randrange(len(messageArr))
     f_in.close()
     return messageArr[index].replace('\n', '')
 
