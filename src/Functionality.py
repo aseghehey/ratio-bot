@@ -13,15 +13,14 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     print('sendTweetOn')
     if isRatio(ratiotwt, ratioedtwt):
         if imageEdit(ratioedtwt):
-            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yes2ratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
             print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
         else:
-            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), "assets/pics/ratio/decisionratio.jpeg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-            print(f'UNI 1')
+            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), getRandomMessage("assets/textfiles/pictures/yesratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            print(f'UI 1')
         return
+    api.update_status_with_media(getRandomMessage('assets/textfiles/messages/noratio.txt'), getRandomMessage("src/assets/textfiles/pictures/noratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
     print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
-    api.update_status(getRandomMessage('assets/textfiles/messages/noratio.txt'), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-
 
 def replyratio(api, lastseen):
     '''
@@ -54,7 +53,8 @@ def replyratio(api, lastseen):
             previousTweet = quoteFormat[1][0]
             beforePrevious = quoteFormat[1][1]
             sendTweet(api, mention, previousTweet, beforePrevious)  
-        writeLastSeen(mention.id_str)
+        # writeLastSeen(mention.id_str)
+    writeLastSeen(mention.id_str)
 
 def profilePictureUrl(tweet):
     '''

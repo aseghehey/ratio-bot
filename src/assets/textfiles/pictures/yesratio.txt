@@ -1,9 +1,2 @@
-pics/ratio/20210917_175607.jpg
-pics/ratio/20220307_173506.jpg
-pics/ratio/20220509_022117.jpg
-pics/ratio/20220611_200238.jpg
-pics/ratio/checkingratio.png
-pics/ratio/decisionratio.jpeg
-pics/ratio/rratio.jpg
-pics/ratio/ratio10.png
-pics/ratio/IMG_0303.JPG
+assets/pics/ratio/decisionratio.jpeg
+assets/pics/ratio/ratio10.png
