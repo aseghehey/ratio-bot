@@ -44,25 +44,25 @@ def validateRatioFormat(api, tweet):
         This function checks that the 3 tweets: mention, tweet1 (ratio), and tweet2 (ratio'd) are all valid
         and won't crash the bot
     '''
-    print('RF: initiated')
+    print('::::::::: on validateRatioFormat :::::::::')
     if isProtected(tweet) or (tweet.in_reply_to_status_id is None) or (not isValidTweet(api, tweet.in_reply_to_status_id)) or (not isMentionedFormat(tweet)):
-        print('RF: false1')
+        print('CF: false1')
         return [False, []]
 
     tweet_2 = status(api, tweet.in_reply_to_status_id) 
     if isProtected(tweet_2) or (tweet_2.in_reply_to_status_id is None) or (not isValidTweet(api, tweet_2.in_reply_to_status_id)) or (not isMentionedFormat(tweet_2)): 
-        print('RF: false2')
+        print('CF: false2')
         return [False, []]
 
     tweet_1 = status(api, tweet_2.in_reply_to_status_id)
     if isProtected(tweet_1):
-        print('RF: false3')
+        print('CF: false3')
         return [False, []]
-    print('RF: true')
+    print('CF: true')
     return [True, [tweet_2, tweet_1]]
 
 def validQuoteRatioFormat(api, mention):
-    print('QF: initiated')
+    print('::::::::: on validQuoteRatioFormat :::::::::')
     if isProtected(mention) or (mention.in_reply_to_status_id is None) or (not isValidTweet(api, mention.in_reply_to_status_id)):
         print('QF: false1')
         return [False, []]

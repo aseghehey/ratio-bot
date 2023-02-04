@@ -10,6 +10,6 @@ if __name__ == "__main__":
         while True:
             last_id = getLastSeen()
             replyratio(api, last_id)
-            time.sleep(60)
+            time.sleep(1)
     except Exception as err:
-        print(f'ERROR: {err}')
+        print(f'::::::::: ERROR: {err} :::::::::')

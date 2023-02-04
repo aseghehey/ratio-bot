@@ -12,11 +12,11 @@ def writeLastSeen(content):
     f_write = open("assets/textfiles/last_tweet.txt", 'w')
     f_write.write(content)
     f_write.close()
-    print(f'id written {content}')
+    print(f'::::::::: Written: {content} :::::::::')
 
 def getLastSeen(): 
     f_read = open("assets/textfiles/last_tweet.txt", 'r')
     last_seen_id = int(f_read.read().strip())
     f_read.close()
-    print(f'id read: {last_seen_id}')
+    print(f'::::::::: Read: {last_seen_id} :::::::::')
     return last_seen_id

@@ -10,51 +10,52 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
     '''
         This function is used to post the tweet reply.
     '''
-    print('sendTweetOn')
+    print('::::::::: sendTweetOn :::::::::')
     if isRatio(ratiotwt, ratioedtwt):
         if imageEdit(ratioedtwt):
-            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yes2ratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-            print(f'UI {ratiotwt.id_str} {ratioedtwt.id_str}')
+            # api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yes2ratio.txt'), "assets/pics/downloads/pic.jpg", in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            print(f'::::::::: UI1 {ratiotwt.id_str} {ratioedtwt.id_str} :::::::::')
         else:
-            api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), getRandomMessage("assets/textfiles/pictures/yesratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-            print(f'UI 1')
+            # api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), getRandomMessage("assets/textfiles/pictures/yesratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+            print(f'::::::::: UI2 {ratiotwt.id_str} {ratioedtwt.id_str} :::::::::')
         return
-    api.update_status_with_media(getRandomMessage('assets/textfiles/messages/noratio.txt'), getRandomMessage("src/assets/textfiles/pictures/noratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
-    print(f'UNI {ratiotwt.id_str} {ratioedtwt.id_str}')
+    # api.update_status_with_media(getRandomMessage('assets/textfiles/messages/noratio.txt'), getRandomMessage("src/assets/textfiles/pictures/noratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+    print(f'::::::::: UNI {ratiotwt.id_str} {ratioedtwt.id_str} :::::::::')
 
 def replyratio(api, lastseen):
     '''
         This function goes through the mentions timeline, and checks the ratios.
     '''
-
+    print('::::::::: on replyRatio :::::::::')
     mentionTimeline = api.mentions_timeline(since_id=lastseen) # accessing the timeline since the last seen id
     for mention in reversed(mentionTimeline): # removed reverse()
 
-        print(f'at {mention.id_str}')
+        print(f'::::::::: @ {mention.id_str} :::::::::')
         #checks:
         if isProtected(mention) or (not isValidTweet(api, mention.id)) or (not isRatioRequest(mention.text)) or (mention.user.id == 1537546826026319872):
-            print(f'FAIL CHECK')
+            print(f'::::::::: FAIL CHECK :::::::::')
+            writeLastSeen(mention.id_str)
             continue
         
         normalFormat = validateRatioFormat(api, mention)
-        quoteFormat = validQuoteRatioFormat(api, mention)
-
-        if (not normalFormat[0]) and (not quoteFormat[0]):
-            print('NO FORMAT')
-            continue
-
+        
         if normalFormat[0]:
-            print('NORMAL FORMAT')   
+            print('::::::::: COMMENT FORMAT :::::::::')   
             previousTweet = normalFormat[1][0]
             beforePrevious = normalFormat[1][1]
             sendTweet(api, mention, previousTweet, beforePrevious)  
         else:
-            print('QUOTE FORMAT')
+            quoteFormat = validQuoteRatioFormat(api, mention)
+
+            if not quoteFormat[0]:
+                writeLastSeen(mention.id_str)
+                continue
+
+            print('::::::::: QUOTE FORMAT :::::::::')
             previousTweet = quoteFormat[1][0]
             beforePrevious = quoteFormat[1][1]
             sendTweet(api, mention, previousTweet, beforePrevious)  
-        # writeLastSeen(mention.id_str)
-    writeLastSeen(mention.id_str)
+        writeLastSeen(mention.id_str)
 
 def profilePictureUrl(tweet):
     '''
@@ -74,7 +75,7 @@ def profilePictureUrl(tweet):
     add = "_400x400"[::-1]  
     new_url = image_url[:l + 1] + add + image_url[r + 1:]
     new_url = new_url[::-1]
-    print('Url operation done sucessfully')
+    print(f'::::::::: URL {new_url} :::::::::')
     return new_url
 
 def downloadProfilePic(url):
@@ -86,7 +87,7 @@ def downloadProfilePic(url):
     if res.status_code == 200:
         with open('assets/pics/downloads/pic.jpg', 'wb') as f:
             shutil.copyfileobj(res.raw, f)
-    print('Downloaded image successfully')
+    print('::::::::: Downloaded image successfully :::::::::')
 
 def imageEdit(tweet):
     ''' 
@@ -108,7 +109,8 @@ def imageEdit(tweet):
         image.paste(gradient,(0,0), gradient)
         image.paste(letter, (100,100), letter)
         image.save(picpath)
-        print('Image done succesfully')
+        print('::::::::: Image edit success :::::::::')
         return True
     except Exception as e:
+        print("::::::::: Image edit failed :::::::::")
         return False
