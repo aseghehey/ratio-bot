@@ -19,7 +19,7 @@ def sendTweet(api, mentionedtwt, ratiotwt, ratioedtwt):
             api.update_status_with_media(getRandomMessage('assets/textfiles/messages/yesratio.txt'), getRandomMessage("assets/textfiles/pictures/yesratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
             print(f'::::::::: UI2 {ratiotwt.id_str} {ratioedtwt.id_str} :::::::::')
         return
-    api.update_status_with_media(getRandomMessage('assets/textfiles/messages/noratio.txt'), getRandomMessage("src/assets/textfiles/pictures/noratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
+    api.update_status_with_media(getRandomMessage('assets/textfiles/messages/noratio.txt'), getRandomMessage("assets/textfiles/pictures/noratio.txt"), in_reply_to_status_id= mentionedtwt.id, auto_populate_reply_metadata=True)
     print(f'::::::::: UNI {ratiotwt.id_str} {ratioedtwt.id_str} :::::::::')
 
 def replyratio(api, lastseen):
@@ -44,7 +44,7 @@ def replyratio(api, lastseen):
             beforePrevious = normalFormat[1][1]
             sendTweet(api, mention, previousTweet, beforePrevious)  
         else:
-            quoteFormat = validQuoteRatioFormat(api, mention)
+            quoteFormat = validQuoteRatioFormat(api, mention) 
 
             if not quoteFormat[0]:
                 continue
