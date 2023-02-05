@@ -1,2 +1,2 @@
-pics/noratio/noratio.jpeg
-pics/noratio/vardecision_noratio.jpeg
+assets/pics/noratio/noratio.jpeg
+assets/pics/noratio/vardecision_noratio.jpeg
