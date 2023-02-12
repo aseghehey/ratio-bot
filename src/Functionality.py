@@ -35,14 +35,14 @@ def replyratio(api, lastseen):
         if isProtected(mention) or (not isValidTweet(api, mention.id)) or (not isRatioRequest(mention.text)) or (mention.user.id == 1537546826026319872):
             print(f'::::::::: FAIL CHECK :::::::::')
             continue
-        
+
+        previousTweet, beforePrevious = None, None
         normalFormat = validateRatioFormat(api, mention)
-        
+       
         if normalFormat[0]:
             print('::::::::: COMMENT FORMAT :::::::::')   
             previousTweet = normalFormat[1][0]
             beforePrevious = normalFormat[1][1]
-            sendTweet(api, mention, previousTweet, beforePrevious)  
         else:
             quoteFormat = validQuoteRatioFormat(api, mention) 
 
@@ -52,7 +52,12 @@ def replyratio(api, lastseen):
             print('::::::::: QUOTE FORMAT :::::::::')
             previousTweet = quoteFormat[1][0]
             beforePrevious = quoteFormat[1][1]
-            sendTweet(api, mention, previousTweet, beforePrevious)  
+        
+        try:
+            sendTweet(api, mention, previousTweet, beforePrevious)
+        except:
+            print("sendTweet try-catch continue")
+            continue
 
 def profilePictureUrl(tweet):
     '''
