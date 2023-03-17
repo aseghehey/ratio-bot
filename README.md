@@ -1,10 +1,5 @@
 # Ratio Bot 🤖
 
-## Introduction
-
-> A bot that checks if a tweet is a possible ratio. Mention me under any tweet with the "check ratio" keyword
-
-## Usability
 > Here's how to use it:
 
 > 1️⃣ Follow [Ratio Bot](https://twitter.com/_ratiobot)
